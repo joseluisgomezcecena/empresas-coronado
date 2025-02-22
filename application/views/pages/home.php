@@ -1,321 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Car Parts Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .hero {
+            background: url('<?php echo base_url() ?>assets/images/car1.jpg') center/cover no-repeat;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            flex-direction: column;
+            position: relative;
+        }
 
+        .search-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            width: 80%;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 70vh;
+            z-index: 10;
+        }
 
-<div class="intro intro-carousel swiper position-relative">
+        .font-bolder {
+            font-weight: 700 !important;
+        }
 
-    <div class="swiper-wrapper">
+        .btn{
+            border-radius:.25rem!important;
+            font-weight: 700 !important;
+        }
 
-    <?php foreach ($slides as $slide) : ?>
+        /* on mobile */
+        @media (max-width: 768px) {
+            .hero {
+                height: 80vh;
+            }
 
-      <div class="swiper-slide carousel-item-a intro-item bg-image" style="background-image: url(<?php echo base_url("uploads/properties/") ?><?php echo $slide['url'] ?>)">
-        <div class="overlay overlay-a"></div>
-        <div class="intro-content display-table">
-          <div class="table-cell">
-            <div class="container">
-              <div class="row">
-                <div class="col-lg-8">
-                  <div class="intro-body">
-                    <p class="intro-title-top"> 
-                      <?php echo $slide['title'] ?>
-                    </p>
-                    <h1 class="intro-title mb-4 ">
-                      <span class="color-b"><?php echo $slide['street'] ?> <?php echo $slide['number'] ?>, </span> <br> <?php echo $slide['nhood'] ?>
-                    </h1>
-                    <p class="intro-subtitle intro-price">
-                      <a href="#"><span class="price-a">
-                        <?php
-                         if($slide['purpose'] == 'v'){echo "Venta";}
-                        elseif($slide['purpose'] == 'r'){echo "Renta";}else{echo "Traspaso";} ?> | <?php echo number_format($slide['price']) ?></span></a>
-                    </p>
-                  </div>
-                </div>
-              </div>
+            .search-card {
+                top: 65vh;
+            }
+
+            .margin-mobile {
+                margin-top: 250px;
+            }
+        }
+
+        .navbar-toggler{
+            border: none;
+        }
+
+        a{
+            text-decoration: none !important;
+        }
+
+        .bg-black{
+            background-color: #000 !important;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Empresas Coronado</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#nosotros">Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#catalogo">Catálogo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+                </ul>
             </div>
-          </div>
         </div>
-      </div>
-      <?php endforeach; ?>
+    </nav>
 
-      <!--
-      <div class="swiper-slide carousel-item-a intro-item bg-image" style="background-image: url(./assets/frontend/img/slide-2.jpg)">
-        <div class="overlay overlay-a"></div>
-        <div class="intro-content display-table">
-          <div class="table-cell">
-            <div class="container">
-              <div class="row">
-                <div class="col-lg-8">
-                  <div class="intro-body">
-                    <p class="intro-title-top">Doral, Florida
-                      <br> 78345
-                    </p>
-                    <h1 class="intro-title mb-4">
-                      <span class="color-b">204 </span> Rino
-                      <br> Venda Road Five
-                    </h1>
-                    <p class="intro-subtitle intro-price">
-                      <a href="#"><span class="price-a">rent | $ 12.000</span></a>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <header class="hero">
+        <div class="container">
+            <h1 class="display-4 font-bolder">Empresas Coronado</h1>
+            <p class="lead">Partes para todas las marcas y modelos</p>
         </div>
-      </div>
-      <div class="swiper-slide carousel-item-a intro-item bg-image" style="background-image: url(./assets/frontend/img/slide-3.jpg)">
-        <div class="overlay overlay-a"></div>
-        <div class="intro-content display-table">
-          <div class="table-cell">
-            <div class="container">
-              <div class="row">
-                <div class="col-lg-8">
-                  <div class="intro-body">
-                    <p class="intro-title-top">Doral, Florida
-                      <br> 78345
-                    </p>
-                    <h1 class="intro-title mb-4">
-                      <span class="color-b">204 </span> Alira
-                      <br> Roan Road One
-                    </h1>
-                    <p class="intro-subtitle intro-price">
-                      <a href="#"><span class="price-a">rent | $ 12.000</span></a>
-                    </p>
-                  </div>
-                </div>
-              </div>
+    </header>
+
+    <div class="search-card mb-5">
+        <h2 class="font-bolder mb-2">Busqueda de piezas</h2>
+        <p class="lead">Busca piezas en nuestro amplio inventario.</p>
+        <form class="row g-3 mb-4">
+            <div class="col-md-2">
+                <select class="form-select" aria-label="Seleccionar Marca">
+                    <option selected>Marca</option>
+                    <option value="1">Toyota</option>
+                    <option value="2">Honda</option>
+                    <option value="3">Ford</option>
+                </select>
             </div>
-          </div>
-        </div>
-      </div>
-      -->
+            <div class="col-md-2">
+                <select class="form-select" aria-label="Seleccionar Modelo">
+                    <option selected>Modelo</option>
+                    <option value="1">Corolla</option>
+                    <option value="2">Civic</option>
+                    <option value="3">Mustang</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-select" aria-label="Seleccionar Año">
+                    <option selected>Año</option>
+                    <option value="1">2023</option>
+                    <option value="2">2022</option>
+                    <option value="3">2021</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Buscar Parte">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-dark w-100">Buscar</button>
+            </div>
+            <a style="text-decoration:none;" href="<?php echo base_url("catalogo") ?>">Busqueda Avanzada ></a>
+        </form>
     </div>
-    <div class="swiper-pagination"></div>
-  </div><!-- End Intro Section -->
+    
+    <section id="about" class="py-5 text-center mt-5">
+        <div class="container margin-mobile">
+            <h2 class="mt-5 font-bolder">Encuentra las Mejores Autopartes al Mejor Precio</h2>
+            <p class="lead">En Empresas Coronado, ofrecemos una amplia selección de autopartes para todas las marcas y modelos.
+                 Nuestro yonque cuenta con piezas originales a precios accesibles, garantizando calidad y rendimiento para tu vehículo.
+                Aquí encontrarás lo que buscas con la mejor atención y servicio.</p>
+            <div class="row mt-5">
+                <div class="col-md-8">
+                    <div class="card shadow p-3 bg-dark text-white mb-5">
+                        <h3 style="font-weight:800">¿Por qué elegirnos?</h3>
 
-
-
-
-   <!-- ======= Latest Properties Section ======= -->
-   <section class="section-property section-t8 mb-5">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="title-wrap d-flex justify-content-between">
-              <div class="title-box">
-                <h2 class="title-a">Propiedades Recientes</h2>
-              </div>
-              <div class="title-link">
-                <a class="btn btn-b-n " href="<?php echo base_url("property_list") ?>">Todas
-                  <span class="bi bi-chevron-right"></span>
-                </a>
-              </div>
+                        <h5>Calidad Y Disponibilidad</h5>
+                        <p>
+                        Nuestro inventario en línea te permite encontrar autopartes fácilmente, 
+                        con disponibilidad garantizada y acceso 24/7 desde cualquier dispositivo. ¡Compra rápido y sin complicaciones!
+                        </p>
+                        <br><br/>
+                        <a href="<?php echo base_url("catalogo") ?>" class="btn btn-primary btn-lg mb-3">Ver Catalogo</a>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <img src="<?php echo base_url("assets/images/pickup-01.png") ?>" alt="">
+                </div>
             </div>
-          </div>
         </div>
-
-        <div id="property-carousel" class="swiper">
-          <div class="swiper-wrapper">
-
-          <?php foreach ($properties as $property) : ?>
-            
-            <div  class="carousel-item-b swiper-slide">
-              <div style="background-image: url('<?php echo base_url("uploads/properties/" . $controller->main_image($property['property_id'])); ?>'); background-size: cover; background-position: center; height: 450px;" class="card-box-a card-shadow">
-                <!--
-                <div style="" class="img-box-a">
-                  <img src="./uploads/properties/<?php echo  $controller->main_image($property['property_id']) ?>" alt="" class="img-a img-fluid">
+    </section>
+    
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>Empresas Coronado S.A. de C.V.</h5>
+                    <ul class="list-unstyled">
+                        <li><p href="#" class="text-white">
+                            Blvd. Lázaro Cárdenas Km 2.5, La Bodega, 21298 Mexicali, B.C.
+                        </p></li>
+                        <li>
+                            <p href="#" class="text-white">Tel. (686) 216 7037</p>
+                        </li>
+                    </ul>
                 </div>
-                -->
-                <div class="card-overlay">
-                  <div class="card-overlay-a-content">
-                    <div class="card-header-a">
-                      <h2 class="card-title-a">
-                        <a href="property-single.html"><?php echo $property['title'] ?></a>
-                          <br /> <?php echo $property['street'] ?> <?php echo $property['number'] ?> <?php $property['nhood'] ?></a>
-                      </h2>
-                    </div>
-                    <div class="card-body-a">
-                      <div class="price-box d-flex">
-                        <span class="price-a"><?php if( $property['purpose'] == 'v'){echo "Venta";}elseif ($property['purpose']=='r'){echo "Renta";}else{echo "Traspaso";} ?> | $ <?php echo number_format($property['price']) ?></span>
-                      </div>
-                      <a href="<?php echo base_url("property/" . $property['slug']) ?>" class="link-a">Ver mas!
-                        <span class="bi bi-chevron-right"></span>
-                      </a>
-                    </div>
-                    <div class="card-footer-a">
-                      <ul class="card-info d-flex justify-content-around">
-                        <li>
-                          <h4 class="card-info-title">Terreno</h4>
-                          <span><?php echo $property['surface'] ?> <?php echo $property['um'] ?>
-                            <!--<sup>2</sup>-->
-                          </span>
-                        </li>
-                        <li>
-                          <h4 class="card-info-title">Recamaras</h4>
-                          <span><?php echo $property['bedrooms'] ?></span>
-                        </li>
-                        <li>
-                          <h4 class="card-info-title">Baños</h4>
-                          <span><?php echo $property['bathrooms'] ?></span>
-                        </li>
-                        <li>
-                          <h4 class="card-info-title">Garages</h4>
-                          <span><?php echo $property['garage'] ?></span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+                <div class="col-md-3">
+                    <h5>Navegación</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Sobre la empresa</a></li>
+                        <li><a href="#" class="text-white">Catalogo</a></li>
+                        <li><a href="#" class="text-white">Contacto</a></li>
+                    </ul>
                 </div>
-              </div>
-            </div><!-- End carousel item -->
-            <?php endforeach; ?>
-
-
-            <!--
-
-            <div class="carousel-item-b swiper-slide">
-              <div class="card-box-a card-shadow">
-                <div class="img-box-a">
-                  <img src="./assets/frontend/img/property-3.jpg" alt="" class="img-a img-fluid">
+                <div class="col-md-3">
+                    <h5>Politicas</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Politica de privacidad</a></li>
+                    </ul>
                 </div>
-                <div class="card-overlay">
-                  <div class="card-overlay-a-content">
-                    <div class="card-header-a">
-                      <h2 class="card-title-a">
-                        <a href="property-single.html">157 West
-                          <br /> Central Park</a>
-                      </h2>
-                    </div>
-                    <div class="card-body-a">
-                      <div class="price-box d-flex">
-                        <span class="price-a">rent | $ 12.000</span>
-                      </div>
-                      <a href="property-single.html" class="link-a">Click here to view
-                        <span class="bi bi-chevron-right"></span>
-                      </a>
-                    </div>
-                    <div class="card-footer-a">
-                      <ul class="card-info d-flex justify-content-around">
-                        <li>
-                          <h4 class="card-info-title">Area</h4>
-                          <span>340m
-                            <sup>2</sup>
-                          </span>
-                        </li>
-                        <li>
-                          <h4 class="card-info-title">Beds</h4>
-                          <span>2</span>
-                        </li>
-                        <li>
-                          <h4 class="card-info-title">Baths</h4>
-                          <span>4</span>
-                        </li>
-                        <li>
-                          <h4 class="card-info-title">Garages</h4>
-                          <span>1</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+                <div class="col-md-3">
+                    <h5>Redes Sociales</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Facebook</a></li>
+                    </ul>
                 </div>
-              </div>
             </div>
-
-            <div class="carousel-item-b swiper-slide">
-              <div class="card-box-a card-shadow">
-                <div class="img-box-a">
-                  <img src="./assets/frontend/img/property-7.jpg" alt="" class="img-a img-fluid">
-                </div>
-                <div class="card-overlay">
-                  <div class="card-overlay-a-content">
-                    <div class="card-header-a">
-                      <h2 class="card-title-a">
-                        <a href="property-single.html">245 Azabu
-                          <br /> Nishi Park let</a>
-                      </h2>
-                    </div>
-                    <div class="card-body-a">
-                      <div class="price-box d-flex">
-                        <span class="price-a">rent | $ 12.000</span>
-                      </div>
-                      <a href="property-single.html" class="link-a">Click here to view
-                        <span class="bi bi-chevron-right"></span>
-                      </a>
-                    </div>
-                    <div class="card-footer-a">
-                      <ul class="card-info d-flex justify-content-around">
-                        <li>
-                          <h4 class="card-info-title">Area</h4>
-                          <span>340m
-                            <sup>2</sup>
-                          </span>
-                        </li>
-                        <li>
-                          <h4 class="card-info-title">Beds</h4>
-                          <span>2</span>
-                        </li>
-                        <li>
-                          <h4 class="card-info-title">Baths</h4>
-                          <span>4</span>
-                        </li>
-                        <li>
-                          <h4 class="card-info-title">Garages</h4>
-                          <span>1</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="carousel-item-b swiper-slide">
-              <div class="card-box-a card-shadow">
-                <div class="img-box-a">
-                  <img src="./assets/frontend/img/property-10.jpg" alt="" class="img-a img-fluid">
-                </div>
-                <div class="card-overlay">
-                  <div class="card-overlay-a-content">
-                    <div class="card-header-a">
-                      <h2 class="card-title-a">
-                        <a href="property-single.html">204 Montal
-                          <br /> South Bela Two</a>
-                      </h2>
-                    </div>
-                    <div class="card-body-a">
-                      <div class="price-box d-flex">
-                        <span class="price-a">rent | $ 12.000</span>
-                      </div>
-                      <a href="property-single.html" class="link-a">Click here to view
-                        <span class="bi bi-chevron-right"></span>
-                      </a>
-                    </div>
-                    <div class="card-footer-a">
-                      <ul class="card-info d-flex justify-content-around">
-                        <li>
-                          <h4 class="card-info-title">Area</h4>
-                          <span>340m
-                            <sup>2</sup>
-                          </span>
-                        </li>
-                        <li>
-                          <h4 class="card-info-title">Beds</h4>
-                          <span>2</span>
-                        </li>
-                        <li>
-                          <h4 class="card-info-title">Baths</h4>
-                          <span>4</span>
-                        </li>
-                        <li>
-                          <h4 class="card-info-title">Garages</h4>
-                          <span>1</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div><!-- End carousel item -->
-          </div>
         </div>
-        <div class="propery-carousel-pagination carousel-pagination"></div>
-
-      </div>
-    </section><!-- End Latest Properties Section -->
+    </footer>
+    <div class="bg-black text-white text-center py-2">
+        <p class="mt-2">© <?php echo date("Y") ?> Empresas Coronado S.A. de C.V. Todos los derechos reservados.</p>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

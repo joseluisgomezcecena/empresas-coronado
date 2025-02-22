@@ -46,12 +46,26 @@
 
 	<style>
 
-		.btn{
-			border-radius:.25rem!important;
-			font-weight: 500 !important;
-		}
+        body {
+            background-image: url('<?php echo base_url() ?>assets/images/car1.jpg');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+        }
 
+        /* background overlay */
+        .bg-overlay {
+            background: rgba(0, 0, 0, 0.7);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 999;
+        }
 
+    
 		/* Hide scrollbar for Chrome, Safari and Opera */
 		.table-responsive::-webkit-scrollbar {
 			display: none;
@@ -178,5 +192,7 @@
 
 </head>
 <body>
-    <div class="app">
-        <div class="layout">
+    <!-- background overlay -->
+    
+    <div class="app1">
+        <div class="layout1">

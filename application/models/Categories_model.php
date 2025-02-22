@@ -24,7 +24,7 @@ class Categories_model extends CI_Model
         return $query->row_array();
     }
 
-    public function update_category($data, $id)
+    public function update_category($id, $data)
     {
         $this->db->where('category_id', $id);
         return $this->db->update('category', $data);

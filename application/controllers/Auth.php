@@ -58,11 +58,9 @@ class Auth extends CI_Controller {
         if ($this->form_validation->run() == FALSE) 
         {
             // Display login form with validation errors
-            $this->load->view('_templates/header', $data);
-            //$this->load->view('_templates/topnav');
-            //$this->load->view('_templates/sidebar');
+            $this->load->view('_templates/header_login', $data);
             $this->load->view('auth/login');
-            $this->load->view('_templates/footer');
+            $this->load->view('_templates/footer_login');
         } 
         else
         {
@@ -80,6 +78,7 @@ class Auth extends CI_Controller {
                     'username' => $username,
                     'email' => $user->email,
                     'is_admin' => $user->is_admin,
+                    'is_agent' => $user->is_agent,
                     'logged_in' => TRUE
                 );
 

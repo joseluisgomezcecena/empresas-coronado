@@ -22,8 +22,18 @@ $route['forms/fields/delete/(:any)'] = 'forms/fields_delete/$1';
 //categories routes.
 $route['categories'] = 'categories/index';
 $route['categories/create'] = 'categories/create';
-$route['categories/edit/(:any)'] = 'categories/edit/$1';
+$route['categories/edit/(:any)'] = 'categories/update/$1';
 $route['categories/delete/(:any)'] = 'categories/delete/$1';
+
+
+$route['products'] = 'products/index';
+$route['products/create'] = 'products/create';
+$route['products/update/(:any)'] = 'products/update/$1';
+$route['products/delete/(:any)'] = 'products/delete/$1';
+$route['products/(:any)'] = 'products/show/$1';
+
+
+
 
 //customfields routes.
 $route['customfields'] = 'customs/index';
@@ -100,8 +110,8 @@ $route['search'] = 'pages/search';
 $route['property/(:any)'] = 'pages/property_details/$1';
 
 //default routes.
-//$route['(:any)'] = 'pages/view/$1';
-$route['(:any)'] = 'dashboards/index';
-$route['default_controller'] = 'dashboards/index';
+$route['(:any)'] = 'pages/view/$1';
+//$route['(:any)'] = 'dashboards/index';
+$route['default_controller'] = 'pages/view';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

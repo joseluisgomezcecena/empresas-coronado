@@ -25,13 +25,13 @@
             </div>
         <?php } ?>
 
-        <table style="font-size:12px;" id="data-categories" class="table">
-            <thead>
+        <table style="font-size:14px;" id="data-categories" class="table">
+            <thead style="font-weight: 700;">
                 <tr>
-                    <th>Categoria</th>
-                    <th>Creado</th>
-                    <th>Actualizado</th>
-                    <th>Acciones</th>
+                    <th style="font-weight: 700;">Categoria</th>
+                    <th style="font-weight: 700;">Creado</th>
+                    <th style="font-weight: 700;">Actualizado</th>
+                    <th style="font-weight: 700;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,17 +41,12 @@
                         <td><?php echo date_format(date_create($category['created_at']), "m/d/Y H:i:s"); ?></td>
                         <td><?php echo date_format(date_create($category['updated_at']), "m/d/Y H:i:s"); ?></td>
                         <td>
-                            <a href="<?php echo base_url('categories/edit/' . $category['category_id']) ?>" class="btn btn-sm btn-warning">Editar</a>
-                            <a href="<?php echo base_url('categories/delete/' . $category['category_id']) ?>" class="btn btn-sm btn-danger">Eliminar</a>
+                            <a href="<?php echo base_url('categories/edit/' . $category['category_id']) ?>" class="btn  btn-dark">Editar</a>
+                            <a href="<?php echo base_url('categories/delete/' . $category['category_id']) ?>" class="btn  btn-danger">Eliminar</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
-            <tfoot>
-                <tr>
-                    <th><a style="font-weight:lighter;" href="#">Lista imprimible</a></th>
-                </tr>
-            </tfoot>
         </table>
     </div>
 </div>

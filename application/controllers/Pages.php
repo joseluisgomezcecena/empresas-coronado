@@ -5,6 +5,7 @@ class Pages extends CI_Controller
     
     public function view($page = 'home')
     {
+        /*
         $data['controller'] = $this;
         $data['title'] = ucfirst($page); // Capitalize the first letter
         //$data['categories'] = $this->Categories_model->get_categories();
@@ -44,6 +45,9 @@ class Pages extends CI_Controller
         $this->load->view('_frontend/navbar', $data);
         $this->load->view('pages/' . $page, $data);
         $this->load->view('_frontend/footer', $data);
+        */
+        $data['hubspot'] = "h";
+        $this->load->view('pages/' . $page, $data);
     }
 
 
