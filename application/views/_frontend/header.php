@@ -14,8 +14,15 @@
   <!-- Favicon -->
   <link rel="shortcut icon" href="<?php echo base_url() ?>assets/images/favicon.ico">
 
+<!--icons for apple devices and android devices-->
+<link rel="apple-touch-icon" sizes="180x180" href="<?php echo base_url() ?>assets/images/apple-touch-icon.png">
 
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+<!-- android-chrome icons -->
+<link rel="icon" type="image/png" sizes="512x512"  href="<?php echo base_url() ?>assets/images/android-chrome-512x512.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="<?php echo base_url() ?>assets/images/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="<?php echo base_url() ?>assets/images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="<?php echo base_url() ?>assets/images/favicon-16x16.png">
+
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
