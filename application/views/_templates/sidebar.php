@@ -14,19 +14,19 @@
             <li <?php echo ($active == 'properties') ? "style='background-color: rgba(55, 222, 119, .15); border-right: 2px solid; border-color: #29b35e;'" : "" ?> class="nav-item dropdown">
                 <a class="dropdown-toggle" href="javascript:void(0);">
                     <span class="icon-holder">
-                        <i class="anticon anticon-home"></i>
+                        <i class="anticon anticon-car"></i>
                     </span>
-                    <span class="title">Propiedades</span>
+                    <span class="title">Productos</span>
                     <span class="arrow">
                         <i class="arrow-icon"></i>
                     </span>
                 </a>
                 <ul class="dropdown-menu">
                     <li>
-                        <a href="<?php echo base_url() ?>properties/create">Nueva Propiedad</a>
+                        <a href="<?php echo base_url() ?>products/create">Agregar Producto</a>
                     </li>
                     <li>
-                        <a href="<?php echo base_url() ?>properties/">Lista</a>
+                        <a href="<?php echo base_url() ?>products/">Lista</a>
                     </li>
                 </ul>
             </li>

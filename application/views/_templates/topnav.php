@@ -6,9 +6,9 @@
             <img style="width:200px;" src="<?php echo base_url(); ?>assets/images/logowide.png" alt="Logo">
             <img style="width:70px;" class="logo-fold" src="<?php echo base_url(); ?>assets/images/logosquare.png" alt="Logo">
             -->
-            Bienes<span class="text-success">Raices
+            Empresas<span class="text-primary">Coronado
                         <!--little house icon-->
-                        <sup><span class="anticon anticon-home"></sup>
+                        <sup><span class="anticon anticon-crown"></sup>
                         </span>
             
         </a>
@@ -110,7 +110,7 @@
             -->
             <li class="dropdown dropdown-animated scale-left">
                 <div class="pointer" data-toggle="dropdown">
-                    <div style="background-color:orange;" class="avatar avatar-image m-h-10 m-r-15">
+                    <div class="bg-primary avatar avatar-image m-h-10 m-r-15">
                         <?php echo strtoupper(substr($this->session->userdata('username'), 0, 1)); //echo just the first letter of the username.?>
                     </div>
                 </div>
