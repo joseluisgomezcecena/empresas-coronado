@@ -11,7 +11,7 @@
                 </a>
             </li>
             
-            <li <?php echo ($active == 'properties') ? "style='background-color: rgba(55, 222, 119, .15); border-right: 2px solid; border-color: #29b35e;'" : "" ?> class="nav-item dropdown">
+            <li <?php echo ($active == 'products') ? "style='background-color: rgba(7, 139, 255, 0.33); border-right: 2px solid; border-color:rgb(84, 61, 255);'" : "" ?> class="nav-item dropdown">
                 <a class="dropdown-toggle" href="javascript:void(0);">
                     <span class="icon-holder">
                         <i class="anticon anticon-car"></i>
@@ -27,6 +27,9 @@
                     </li>
                     <li>
                         <a href="<?php echo base_url() ?>products/">Lista</a>
+                    </li>
+                    <li>
+                        <a href="<?php echo base_url() ?>inventory/">Inventario</a>
                     </li>
                 </ul>
             </li>
