@@ -64,7 +64,7 @@
                     </div>
 
                     <div class="form-group col-lg-6">
-                        <label class="font-weight-semibold" for="confirmPassword">Agente inmobiliario:</label>
+                        <label class="font-weight-semibold" for="confirmPassword">Contacto:</label>
                         <select class="form-control" name="is_agent">
                             <option value="0">No</option>
                             <option value="1">Si</option>
