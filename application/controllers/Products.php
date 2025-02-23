@@ -7,6 +7,7 @@ class Products extends MY_Controller
         parent::__construct();
         $this->load->model('Products_model');
         $this->load->model('Categories_model');
+        $this->load->model('Inventory_model');
     }
 
     public function index()
@@ -41,15 +42,19 @@ class Products extends MY_Controller
         $this->form_validation->set_rules('sale_price', 'Precio de Venta', 'required|numeric');
         $this->form_validation->set_rules('suggested_price', 'Precio Sugerido', 'required|numeric');
         $this->form_validation->set_rules('category_id[]', 'Categorías', 'required');
+        $this->form_validation->set_rules('location', 'Ubicación', 'required');
         // Years validation is not required, as a product might fit all years of a model
 
-        if ($this->form_validation->run() === FALSE) {
+        if ($this->form_validation->run() === FALSE) 
+        {
             $this->load->view('_templates/header', $data);
             $this->load->view('_templates/topnav');
             $this->load->view('_templates/sidebar');
             $this->load->view('products/create', $data);
             $this->load->view('_templates/footer');
-        } else {
+        } 
+        else 
+        {
             // Handle image upload
             $product_image = '';
             if (!empty($_FILES['product_image']['name'])) {
@@ -80,7 +85,9 @@ class Products extends MY_Controller
                 'purchase_price' => $this->input->post('purchase_price'),
                 'sale_price' => $this->input->post('sale_price'),
                 'suggested_price' => $this->input->post('suggested_price'),
-                'product_image' => $product_image
+                'location' => $this->input->post('location'),
+                'product_image' => $product_image,
+                'qty' => $this->input->post('qty') // Add initial quantity
             );
 
             $product_id = $this->Products_model->create_product($product_data);
@@ -218,6 +225,7 @@ class Products extends MY_Controller
         }
     }
 
+    /*
     public function view($id)
     {
         // Check if product exists
@@ -231,6 +239,28 @@ class Products extends MY_Controller
         $data['product'] = $this->Products_model->get_product($id);
         $data['product_categories'] = $this->Products_model->get_product_categories($id);
         $data['product_years'] = $this->Products_model->get_product_years($id);
+        
+        $this->load->view('_templates/header', $data);
+        $this->load->view('_templates/topnav');
+        $this->load->view('_templates/sidebar');
+        $this->load->view('products/view', $data);
+        $this->load->view('_templates/footer');
+    }
+    */
+    public function view($id)
+    {
+        // Check if product exists
+        if(!$this->Products_model->get_product($id)){
+            $this->session->set_flashdata('error', 'El producto no existe');
+            redirect(base_url().'products');
+        }
+        
+        $data['active'] = 'products';
+        $data['title'] = 'Detalles de Producto';
+        $data['product'] = $this->Products_model->get_product_with_inventory($id);
+        $data['product_categories'] = $this->Products_model->get_product_categories($id);
+        $data['product_years'] = $this->Products_model->get_product_years($id);
+        $data['inventory_movements'] = $this->Inventory_model->get_product_movements($id);
         
         $this->load->view('_templates/header', $data);
         $this->load->view('_templates/topnav');

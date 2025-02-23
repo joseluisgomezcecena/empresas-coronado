@@ -113,25 +113,35 @@
                         <small class="form-text text-muted">Formatos permitidos: jpg, jpeg, png, gif. Tamaño máximo: 2MB</small>
                     </div>
 
-                    <div class="form-group col-md-12">
-    <label for="years">Años Compatibles</label>
-    <div class="years-container">
-        <div class="year-row">
-            <div class="input-group">
-                <input type="number" class="form-control" name="years[]" placeholder="Año" min="1900" max="<?php echo date('Y') + 1; ?>">
-                <div class="input-group-append">
-                    <button class="btn btn-danger remove-year-btn" type="button">
-                        <i class="anticon anticon-close"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <button type="button" class="btn btn-sm btn-secondary add-year-btn mt-2">
-        <i class="anticon anticon-plus"></i> Agregar otro año
-    </button>
-    <small class="form-text text-muted">Agregue los años para los que este producto es compatible.</small>
-</div>
+                    <div class="form-group col-md-6">
+                        <label for="years">Años Compatibles</label>
+                        <div class="years-container">
+                            <div class="year-row">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="years[]" placeholder="Año" min="1900" max="<?php echo date('Y') + 1; ?>">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-danger remove-year-btn" type="button">
+                                            <i class="anticon anticon-close"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-secondary add-year-btn mt-2">
+                            <i class="anticon anticon-plus"></i> Agregar otro año
+                        </button>
+                        <small class="form-text text-muted">Agregue los años para los que este producto es compatible.</small>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="years">Cantidad Inicial</label>
+                        <input type="number" class="form-control" id="qty" name="qty" placeholder="Cantidad Inicial" value="<?php echo set_value('qty'); ?>">
+                        <?php echo form_error('initial_quantity', '<div class="text-danger">', '</div>'); ?>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="location">Ubicación</label>
+                        <input type="text" class="form-control" id="location" name="location" placeholder="Ubicación" value="<?php echo set_value('location'); ?>">
+                        <?php echo form_error('location', '<div class="text-danger">', '</div>'); ?>
+                    </div>
                     
                     <div class="form-group col-md-12">
                         <button type="submit" class="btn btn-primary">Guardar Producto</button>

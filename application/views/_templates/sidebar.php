@@ -26,10 +26,7 @@
                         <a href="<?php echo base_url() ?>products/create">Agregar Producto</a>
                     </li>
                     <li>
-                        <a href="<?php echo base_url() ?>products/">Lista</a>
-                    </li>
-                    <li>
-                        <a href="<?php echo base_url() ?>inventory/">Inventario</a>
+                        <a href="<?php echo base_url() ?>products/">Inventario</a>
                     </li>
                 </ul>
             </li>

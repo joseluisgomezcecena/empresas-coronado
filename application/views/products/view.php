@@ -47,120 +47,134 @@
         <?php } ?>
 
         <div class="row">
-            <div class="col-md-4 text-center mb-4">
-                <?php if (!empty($product['product_image'])) : ?>
-                    <img src="<?php echo base_url('uploads/products/' . $product['product_image']); ?>" alt="<?php echo $product['product_name']; ?>" class="img-fluid" style="max-height: 250px;">
-                <?php else : ?>
-                    <img src="<?php echo base_url('assets/images/no-image.png'); ?>" alt="No Image" class="img-fluid" style="max-height: 250px;">
-                <?php endif; ?>
-            </div>
-            <div class="col-md-8">
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <tbody>
-                            <tr>
-                                <th style="width: 30%;">Número de Parte</th>
-                                <td><?php echo $product['part_number']; ?></td>
-                            </tr>
-                            <tr>
-                                <th>Nombre del Producto</th>
-                                <td><?php echo $product['product_name']; ?></td>
-                            </tr>
-                            <tr>
-                                <th>Marca de Auto</th>
-                                <td><?php echo $product['car_brand']; ?></td>
-                            </tr>
-                            <tr>
-                                <th>Modelo de Auto</th>
-                                <td><?php echo $product['car_model']; ?></td>
-                            </tr>
-                            <tr>
-                                <th>Precio de Compra</th>
-                                <td>$<?php echo number_format($product['purchase_price'], 2); ?></td>
-                            </tr>
-                            <tr>
-                                <th>Precio de Venta</th>
-                                <td>$<?php echo number_format($product['sale_price'], 2); ?></td>
-                            </tr>
-                            <tr>
-                                <th>Precio Sugerido</th>
-                                <td>$<?php echo number_format($product['suggested_price'], 2); ?></td>
-                            </tr>
-                            <tr>
-                                <th>Margen de Ganancia</th>
-                                <td>
-                                    <?php 
-                                    $margin = $product['sale_price'] - $product['purchase_price'];
-                                    $margin_percentage = ($margin / $product['purchase_price']) * 100;
-                                    echo '$' . number_format($margin, 2) . ' (' . number_format($margin_percentage, 2) . '%)';
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Categorías</th>
-                                <td>
-                                    <?php 
-                                    $category_names = array();
-                                    foreach ($product_categories as $cat_id) {
-                                        foreach ($this->Categories_model->get_categories() as $category) {
-                                            if ($category['category_id'] == $cat_id) {
-                                                $category_names[] = $category['category_name'];
-                                                break;
-                                            }
+    <!-- Left column with image -->
+    <div class="col-md-4 text-center mb-4">
+        <?php if (!empty($product['product_image'])) : ?>
+            <img src="<?php echo base_url('uploads/products/' . $product['product_image']); ?>" alt="<?php echo $product['product_name']; ?>" class="img-fluid" style="max-height: 250px;">
+        <?php else : ?>
+            <img src="<?php echo base_url('assets/images/no-image.png'); ?>" alt="No Image" class="img-fluid" style="max-height: 250px;">
+        <?php endif; ?>
+    </div>
+    <!-- Right column with details -->
+    <div class="col-md-8">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th style="width: 30%;">Número de Parte</th>
+                        <td><?php echo $product['part_number']; ?></td>
+                    </tr>
+                    <tr>
+                        <th>Nombre del Producto</th>
+                        <td><?php echo $product['product_name']; ?></td>
+                    </tr>
+                    <tr>
+                        <th>Marca de Auto</th>
+                        <td><?php echo $product['car_brand']; ?></td>
+                    </tr>
+                    <tr>
+                        <th>Modelo de Auto</th>
+                        <td><?php echo $product['car_model']; ?></td>
+                    </tr>
+                    <tr>
+                        <th>Ubicación</th>
+                        <td><?php echo $product['location']; ?></td>
+                    </tr>
+                    <tr>
+                        <th>Inventario Actual</th>
+                        <td>
+                            <strong><?php echo $product['current_stock']; ?></strong>
+                            <a href="<?php echo base_url("inventory/movements/".$product['id']) ?>" class="btn btn-sm btn-info ml-2">
+                                Ver Movimientos
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Precio de Compra</th>
+                        <td>$<?php echo number_format($product['purchase_price'], 2); ?></td>
+                    </tr>
+                    <tr>
+                        <th>Precio de Venta</th>
+                        <td>$<?php echo number_format($product['sale_price'], 2); ?></td>
+                    </tr>
+                    <tr>
+                        <th>Precio Sugerido</th>
+                        <td>$<?php echo number_format($product['suggested_price'], 2); ?></td>
+                    </tr>
+                    <tr>
+                        <th>Margen de Ganancia</th>
+                        <td>
+                            <?php 
+                            $margin = $product['sale_price'] - $product['purchase_price'];
+                            $margin_percentage = ($margin / $product['purchase_price']) * 100;
+                            echo '$' . number_format($margin, 2) . ' (' . number_format($margin_percentage, 2) . '%)';
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Años Compatibles</th>
+                        <td>
+                            <?php 
+                            if (!empty($product_years)) {
+                                sort($product_years);
+                                
+                                // Group consecutive years
+                                $ranges = [];
+                                $start = $product_years[0];
+                                $prev = $start;
+                                
+                                for ($i = 1; $i <= count($product_years); $i++) {
+                                    if ($i == count($product_years) || $product_years[$i] != $prev + 1) {
+                                        if ($start == $prev) {
+                                            $ranges[] = $start;
+                                        } else {
+                                            $ranges[] = $start . ' - ' . $prev;
                                         }
-                                    }
-                                    echo !empty($category_names) ? implode(', ', $category_names) : 'Sin categorías';
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Años Compatibles</th>
-                                <td>
-                                    <?php 
-                                    if (!empty($product_years)) {
-                                        // Sort years in ascending order
-                                        sort($product_years);
-                                        
-                                        // Group consecutive years
-                                        $ranges = [];
-                                        $start = $product_years[0];
-                                        $prev = $start;
-                                        
-                                        for ($i = 1; $i <= count($product_years); $i++) {
-                                            if ($i == count($product_years) || $product_years[$i] != $prev + 1) {
-                                                if ($start == $prev) {
-                                                    $ranges[] = $start;
-                                                } else {
-                                                    $ranges[] = $start . ' - ' . $prev;
-                                                }
-                                                if ($i < count($product_years)) {
-                                                    $start = $product_years[$i];
-                                                    $prev = $start;
-                                                }
-                                            } else {
-                                                $prev = $product_years[$i];
-                                            }
+                                        if ($i < count($product_years)) {
+                                            $start = $product_years[$i];
+                                            $prev = $start;
                                         }
-                                        
-                                        echo implode(', ', $ranges);
                                     } else {
-                                        echo 'Sin años especificados';
+                                        $prev = $product_years[$i];
                                     }
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Fecha de Creación</th>
-                                <td><?php echo date('d/m/Y H:i', strtotime($product['created_at'])); ?></td>
-                            </tr>
-                            <tr>
-                                <th>Última Actualización</th>
-                                <td><?php echo date('d/m/Y H:i', strtotime($product['updated_at'])); ?></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                                }
+                                
+                                echo implode(', ', $ranges);
+                            } else {
+                                echo 'Sin años especificados';
+                            }
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Categorías</th>
+                        <td>
+                            <?php 
+                            $category_names = array();
+                            foreach ($product_categories as $cat_id) {
+                                foreach ($this->Categories_model->get_categories() as $category) {
+                                    if ($category['category_id'] == $cat_id) {
+                                        $category_names[] = $category['category_name'];
+                                        break;
+                                    }
+                                }
+                            }
+                            echo !empty($category_names) ? implode(', ', $category_names) : 'Sin categorías';
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Fecha de Creación</th>
+                        <td><?php echo date('d/m/Y H:i', strtotime($product['created_at'])); ?></td>
+                    </tr>
+                    <tr>
+                        <th>Última Actualización</th>
+                        <td><?php echo date('d/m/Y H:i', strtotime($product['updated_at'])); ?></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
+    </div>
+</div
     </div>
 </div>

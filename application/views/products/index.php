@@ -46,6 +46,8 @@
                         <th>Imagen</th>
                         <th>Número de Parte</th>
                         <th>Producto</th>
+                        <th>Ubicación</th>
+                        <th>Stock Actual</th>
                         <th>Marca / Modelo</th>
                         <th>Precio Compra</th>
                         <th>Precio Venta</th>
@@ -66,6 +68,23 @@
                                 </td>
                                 <td><?php echo $product['part_number']; ?></td>
                                 <td><?php echo $product['product_name']; ?></td>
+                                <td>
+                                    <?php 
+                                        echo $product['location'] ? $product['location'] : '<span class="badge badge-warning">Sin Ubicación</span>'; 
+                                    ?>
+                                </td>
+                                <td class="text-center">
+                                    <?php
+                                    if ($product['current_stock'] <= 0) {
+                                        echo '<span class="badge badge-danger">Sin Stock</span>';
+                                    } else {
+                                        echo '<span class="badge badge-success">' . $product['current_stock'] . '</span>';
+                                    }
+                                    ?>
+                                    <a href="<?php echo base_url("inventory/movements/".$product['id']) ?>" class="btn btn-sm btn-info ml-2" title="Ver Movimientos">
+                                        <i class="anticon anticon-eye"></i>&nbsp;Movimientos
+                                    </a>
+                                </td>
                                 <td><?php echo $product['car_brand'] . ' / ' . $product['car_model']; ?></td>
                                 <td>$<?php echo number_format($product['purchase_price'], 2); ?></td>
                                 <td>$<?php echo number_format($product['sale_price'], 2); ?></td>
@@ -79,6 +98,9 @@
                                     </a>
                                     <a href="<?php echo base_url('products/delete/' . $product['id']); ?>" class="btn btn-sm btn-danger" title="Eliminar">
                                         <i class="anticon anticon-delete"></i>
+                                    </a>
+                                    <a href="<?php echo base_url('inventory/add_movement/' . $product['id']); ?>" class="btn btn-sm btn-warning" title="Nuevo Movimiento">
+                                        <i class="anticon anticon-plus"></i>
                                     </a>
                                 </td>
                             </tr>

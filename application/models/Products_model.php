@@ -8,10 +8,24 @@ class Products_model extends CI_Model {
         parent::__construct();
     }
 
+    /*
     public function get_products()
     {
         $this->db->select('p.*');
         $this->db->from('products p');
+        $this->db->order_by('p.product_name', 'ASC');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    */
+
+    public function get_products()
+    {
+        $this->db->select('p.*, 
+            COALESCE(SUM(CASE WHEN im.movement_type = "entrada" THEN im.quantity ELSE -im.quantity END), 0) as current_stock');
+        $this->db->from('products p');
+        $this->db->join('inventory_movements im', 'p.id = im.product_id', 'left');
+        $this->db->group_by('p.id');
         $this->db->order_by('p.product_name', 'ASC');
         $query = $this->db->get();
         return $query->result_array();
@@ -24,11 +38,48 @@ class Products_model extends CI_Model {
         return $query->row_array();
     }
 
+    /*
     public function create_product($data)
     {
         $this->db->insert('products', $data);
         return $this->db->insert_id();
     }
+    */
+
+
+    public function create_product($data)
+    {
+        $this->db->trans_begin();
+
+        // Start transaction
+        try {
+            // Insert product
+            $this->db->insert('products', $data);
+            $product_id = $this->db->insert_id();
+
+            // If initial quantity is set, create inventory movement
+            if (isset($data['qty']) && $data['qty'] > 0) {
+                $movement_data = array(
+                    'product_id' => $product_id,
+                    'movement_type' => 'entrada',
+                    'quantity' => $data['qty'],
+                    'reason' => 'inventario_inicial',
+                    'description' => 'Inventario inicial del producto',
+                    'created_by' => $this->session->userdata('user_id')
+                );
+                
+                $this->db->insert('inventory_movements', $movement_data);
+            }
+
+            $this->db->trans_commit();
+            return $product_id;
+        } catch (Exception $e) {
+            $this->db->trans_rollback();
+            return false;
+        }
+    }
+
+
 
     public function update_product($id, $data)
     {
@@ -159,5 +210,20 @@ class Products_model extends CI_Model {
         $this->db->order_by('p.product_name', 'ASC');
         $query = $this->db->get();
         return $query->result_array();
+    }
+
+
+    public function get_product_with_inventory($id)
+    {
+        $this->db->select('p.*, 
+            COALESCE(SUM(CASE WHEN im.movement_type = "entrada" THEN im.quantity ELSE 0 END), 0) as total_entradas,
+            COALESCE(SUM(CASE WHEN im.movement_type = "salida" THEN im.quantity ELSE 0 END), 0) as total_salidas,
+            COALESCE(SUM(CASE WHEN im.movement_type = "entrada" THEN im.quantity ELSE -im.quantity END), 0) as current_stock');
+        $this->db->from('products p');
+        $this->db->join('inventory_movements im', 'p.id = im.product_id', 'left');
+        $this->db->where('p.id', $id);
+        $this->db->group_by('p.id');
+        $query = $this->db->get();
+        return $query->row_array();
     }
 }
