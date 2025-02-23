@@ -2,7 +2,7 @@
 <div class="side-nav">
     <div class="side-nav-inner">
         <ul class="side-nav-menu scrollable">
-            <li class="nav-item dropdown" <?php echo ($active == 'home') ? "style='background-color: rgba(55, 222, 119, .15); border-right: 2px solid; border-color: #29b35e;'" : "" ?> >
+            <li class="nav-item dropdown" <?php echo ($active == 'home') ? "style='background-color: rgba(7, 139, 255, 0.33); border-right: 2px solid; border-color:rgb(84, 61, 255);'" : "" ?> >
                 <a class="dropdown-toggle" href="<?php echo base_url(); ?>admin">
                     <span class="icon-holder">
                         <i class="anticon anticon-dashboard"></i>
@@ -30,7 +30,7 @@
                     </li>
                 </ul>
             </li>
-            <li <?php echo ($active == 'clients') ? "style='background-color: rgba(55, 222, 119, .15); border-right: 2px solid; border-color: #29b35e;'" : "" ?> class="nav-item dropdown">
+            <li <?php echo ($active == 'clients') ? "style='background-color: rgba(7, 139, 255, 0.33); border-right: 2px solid; border-color:rgb(84, 61, 255);'" : "" ?> class="nav-item dropdown">
                 <a class="dropdown-toggle" href="javascript:void(0);">
                     <span class="icon-holder">
                         <i class="anticon anticon-solution"></i>
@@ -54,7 +54,7 @@
                     </li>
                 </ul>
             </li>
-            <li <?php echo ($active == 'categories' || $active == 'customfields') ? "style='background-color: rgba(55, 222, 119, .15); border-right: 2px solid; border-color: #29b35e;'" : "" ?> class="nav-item dropdown">
+            <li <?php echo ($active == 'categories' || $active == 'customfields') ? "style='background-color: rgba(7, 139, 255, 0.33); border-right: 2px solid; border-color:rgb(84, 61, 255);'" : "" ?> class="nav-item dropdown">
                 <a class="dropdown-toggle" href="javascript:void(0);">
                     <span class="icon-holder">
                         <i class="anticon anticon-setting"></i>
@@ -68,12 +68,9 @@
                     <li>
                         <a href="<?php echo base_url() ?>categories/index">Categorias</a>
                     </li>
-                    <li>
-                        <a href="<?php echo base_url() ?>customs/index">Campos Personalizados</a>
-                    </li>
                 </ul>
             </li>
-            <li <?php echo ($active == 'users') ? "style='background-color: rgba(55, 222, 119, .15); border-right: 2px solid; border-color: #29b35e;'" : "" ?> class="nav-item dropdown">
+            <li <?php echo ($active == 'users') ? "style='background-color: rgba(7, 139, 255, 0.33); border-right: 2px solid; border-color:rgb(84, 61, 255);'" : "" ?> class="nav-item dropdown">
                 <a class="dropdown-toggle" href="javascript:void(0);">
                     <span class="icon-holder">
                         <i class="anticon anticon-user-add"></i>

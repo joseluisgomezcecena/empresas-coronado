@@ -43,6 +43,7 @@
                         <?php echo form_error('part_number', '<div class="text-danger">', '</div>'); ?>
                     </div>
                     
+                    <!--
                     <div class="form-group col-md-4">
                         <label for="car_brand">Marca de Auto</label>
                         <input type="text" class="form-control" id="car_brand" name="car_brand" placeholder="Marca de Auto" value="<?php echo set_value('car_brand'); ?>">
@@ -54,6 +55,27 @@
                         <input type="text" class="form-control" id="car_model" name="car_model" placeholder="Modelo de Auto" value="<?php echo set_value('car_model'); ?>">
                         <?php echo form_error('car_model', '<div class="text-danger">', '</div>'); ?>
                     </div>
+                    -->
+                    <div class="form-group col-md-4">
+    <label for="car_brand">Marca de Auto</label>
+    <select class="form-control" id="car_brand" name="car_brand" required>
+        <option value="">Seleccione una marca</option>
+        <?php foreach ($brands as $brand): ?>
+            <option value="<?php echo $brand['id']; ?>" <?php echo set_select('car_brand', $brand['id']); ?>>
+                <?php echo $brand['name']; ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <?php echo form_error('car_brand', '<div class="text-danger">', '</div>'); ?>
+</div>
+
+<div class="form-group col-md-4">
+    <label for="car_model">Modelo de Auto</label>
+    <select class="form-control" id="car_model" name="car_model" required disabled>
+        <option value="">Seleccione un modelo</option>
+    </select>
+    <?php echo form_error('car_model', '<div class="text-danger">', '</div>'); ?>
+</div>
                     
                     <div class="form-group col-md-12">
                         <label for="product_name">Nombre del Producto</label>
@@ -208,5 +230,57 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const brandSelect = document.getElementById('car_brand');
+    const modelSelect = document.getElementById('car_model');
+    
+    // Function to load models for a brand
+    async function loadModels(brandId, selectedModel = null) {
+        if (!brandId) {
+            modelSelect.innerHTML = '<option value="">Seleccione un modelo</option>';
+            modelSelect.disabled = true;
+            return;
+        }
+
+        try {
+            const response = await fetch(`<?php echo base_url('products/get_models_by_brand/'); ?>${brandId}`);
+            if (!response.ok) throw new Error('Network response was not ok');
+            
+            const models = await response.json();
+            
+            let options = '<option value="">Seleccione un modelo</option>';
+            models.forEach(model => {
+                const selected = selectedModel && selectedModel == model.name ? 'selected' : '';
+                options += `<option value="${model.name}" ${selected}>${model.name}</option>`;
+            });
+            
+            modelSelect.innerHTML = options;
+            modelSelect.disabled = false;
+        } catch (error) {
+            console.error('Error loading models:', error);
+            modelSelect.innerHTML = '<option value="">Error cargando modelos</option>';
+            modelSelect.disabled = true;
+        }
+    }
+
+    // Handle brand selection change
+    brandSelect.addEventListener('change', function() {
+        loadModels(this.value);
+    });
+
+    // Initial load if brand is selected (for edit form)
+    <?php if(isset($product) && $product['car_brand']): ?>
+    // Find the brand ID for the current product's brand
+    const brandOptions = Array.from(brandSelect.options);
+    const currentBrand = brandOptions.find(option => option.textContent.trim() === '<?php echo $product['car_brand']; ?>');
+    if (currentBrand) {
+        currentBrand.selected = true;
+        loadModels(currentBrand.value, '<?php echo $product['car_model']; ?>');
+    }
+    <?php endif; ?>
 });
 </script>

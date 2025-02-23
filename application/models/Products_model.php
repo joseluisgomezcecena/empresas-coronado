@@ -19,6 +19,7 @@ class Products_model extends CI_Model {
     }
     */
 
+    /*
     public function get_products()
     {
         $this->db->select('p.*, 
@@ -30,6 +31,21 @@ class Products_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    */
+
+    public function get_products()
+{
+    $this->db->select('p.*, b.name as brand_name, 
+        COALESCE(SUM(CASE WHEN im.movement_type = "entrada" THEN im.quantity ELSE -im.quantity END), 0) as current_stock');
+    $this->db->from('products p');
+    $this->db->join('inventory_movements im', 'p.id = im.product_id', 'left');
+    $this->db->join('brands b', 'p.car_brand = b.id', 'left');  // Add this join
+    $this->db->group_by('p.id');
+    $this->db->order_by('p.product_name', 'ASC');
+    $query = $this->db->get();
+    return $query->result_array();
+}
+
 
     public function get_product($id)
     {

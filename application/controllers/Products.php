@@ -8,6 +8,8 @@ class Products extends MY_Controller
         $this->load->model('Products_model');
         $this->load->model('Categories_model');
         $this->load->model('Inventory_model');
+        $this->load->model('Brand_model');
+        $this->load->model('Model_model');
     }
 
     public function index()
@@ -33,7 +35,8 @@ class Products extends MY_Controller
         $data['active'] = 'products';
         $data['title'] = 'Nuevo Producto';
         $data['categories'] = $this->Categories_model->get_categories();
-        
+        $data['brands'] = $this->Brand_model->get_all_brands();
+
         $this->form_validation->set_rules('part_number', 'Número de Parte', 'required|is_unique[products.part_number]');
         $this->form_validation->set_rules('car_brand', 'Marca de Auto', 'required');
         $this->form_validation->set_rules('car_model', 'Modelo de Auto', 'required');
@@ -121,6 +124,8 @@ class Products extends MY_Controller
         $data['categories'] = $this->Categories_model->get_categories();
         $data['product_categories'] = $this->Products_model->get_product_categories($id);
         $data['product_years'] = $this->Products_model->get_product_years($id);
+        $data['brands'] = $this->Brand_model->get_all_brands();
+
         
         $this->form_validation->set_rules('part_number', 'Número de Parte', 'required');
         $this->form_validation->set_rules('car_brand', 'Marca de Auto', 'required');
@@ -267,5 +272,14 @@ class Products extends MY_Controller
         $this->load->view('_templates/sidebar');
         $this->load->view('products/view', $data);
         $this->load->view('_templates/footer');
+    }
+
+
+    public function get_models_by_brand($brand_id) {
+        $this->load->model('Model_model');
+        $models = $this->Model_model->get_models_by_brand($brand_id);
+        header('Content-Type: application/json');
+        echo json_encode($models);
+        exit;
     }
 }

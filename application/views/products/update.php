@@ -40,17 +40,26 @@
                     </div>
                     
                     <div class="form-group col-md-4">
-                        <label for="car_brand">Marca de Auto</label>
-                        <input type="text" class="form-control" id="car_brand" name="car_brand" placeholder="Marca de Auto" value="<?php echo set_value('car_brand', $product['car_brand']); ?>">
-                        <?php echo form_error('car_brand', '<div class="text-danger">', '</div>'); ?>
-                    </div>
-                    
-                    <div class="form-group col-md-4">
-                        <label for="car_model">Modelo de Auto</label>
-                        <input type="text" class="form-control" id="car_model" name="car_model" placeholder="Modelo de Auto" value="<?php echo set_value('car_model', $product['car_model']); ?>">
-                        <?php echo form_error('car_model', '<div class="text-danger">', '</div>'); ?>
-                    </div>
-                    
+    <label for="car_brand">Marca de Auto</label>
+    <select class="form-control" id="car_brand" name="car_brand" required>
+        <option value="">Seleccione una marca</option>
+        <?php foreach ($brands as $brand): ?>
+            <option value="<?php echo $brand['id']; ?>" 
+                <?php echo ($brand['id'] == $product['car_brand']) ? 'selected' : ''; ?>>
+                <?php echo $brand['name']; ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <?php echo form_error('car_brand', '<div class="text-danger">', '</div>'); ?>
+</div>
+
+<div class="form-group col-md-4">
+    <label for="car_model">Modelo de Auto</label>
+    <select class="form-control" id="car_model" name="car_model" required>
+        <option value="">Seleccione un modelo</option>
+    </select>
+    <?php echo form_error('car_model', '<div class="text-danger">', '</div>'); ?>
+</div>
                     <div class="form-group col-md-12">
                         <label for="product_name">Nombre del Producto</label>
                         <input type="text" class="form-control" id="product_name" name="product_name" placeholder="Nombre del Producto" value="<?php echo set_value('product_name', $product['product_name']); ?>">
@@ -214,5 +223,50 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const brandSelect = document.getElementById('car_brand');
+    const modelSelect = document.getElementById('car_model');
+    const currentModel = '<?php echo $product['car_model']; ?>'; // Store current model
+    
+    async function loadModels(brandId) {
+        if (!brandId) {
+            modelSelect.innerHTML = '<option value="">Seleccione un modelo</option>';
+            modelSelect.disabled = true;
+            return;
+        }
+
+        try {
+            const response = await fetch(`<?php echo base_url('products/get_models_by_brand/'); ?>${brandId}`);
+            if (!response.ok) throw new Error('Network response was not ok');
+            
+            const models = await response.json();
+            
+            let options = '<option value="">Seleccione un modelo</option>';
+            models.forEach(model => {
+                const selected = model.name === currentModel ? 'selected' : '';
+                options += `<option value="${model.name}" ${selected}>${model.name}</option>`;
+            });
+            
+            modelSelect.innerHTML = options;
+            modelSelect.disabled = false;
+        } catch (error) {
+            console.error('Error loading models:', error);
+            modelSelect.innerHTML = '<option value="">Error cargando modelos</option>';
+            modelSelect.disabled = true;
+        }
+    }
+
+    // Handle brand selection change
+    brandSelect.addEventListener('change', function() {
+        loadModels(this.value);
+    });
+
+    // Load models for initial brand
+    if (brandSelect.value) {
+        loadModels(brandSelect.value);
+    }
 });
 </script>

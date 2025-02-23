@@ -85,7 +85,7 @@
                                         <i class="anticon anticon-eye"></i>&nbsp;Movimientos
                                     </a>
                                 </td>
-                                <td><?php echo $product['car_brand'] . ' / ' . $product['car_model']; ?></td>
+                                <td><?php echo $product['brand_name'] . ' / ' . $product['car_model']; ?></td>
                                 <td>$<?php echo number_format($product['purchase_price'], 2); ?></td>
                                 <td>$<?php echo number_format($product['sale_price'], 2); ?></td>
                                 <td>$<?php echo number_format($product['suggested_price'], 2); ?></td>
