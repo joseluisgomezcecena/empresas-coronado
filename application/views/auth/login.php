@@ -3,12 +3,12 @@
         <div class="card shadow-lg opacity-mobile">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between m-b-30">
-                    <a style="color:black; font-weight:900" class="navbar-brand text-brand" href="http://localhost/yonque/">
+                    <a style="color:black; font-weight:900" class="navbar-brand text-brand" href="<?php echo base_url(); ?>">
                         Empresas<span class="text-dark">Coronado</span>
                     </a>
                     <h2 class="m-b-0"></h2>
                 </div>
-                <form action="http://localhost/yonque/auth/login" method="post">
+                <form action="<?php echo base_url()?>auth/login" method="post">
                     <div class="form-group">
                         <label class="font-weight-semibold" for="userName">Usuario:</label>
                         <input type="text" class="form-control" id="userName" name="username" placeholder="Username">
