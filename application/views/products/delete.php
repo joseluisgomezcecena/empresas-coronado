@@ -41,7 +41,7 @@
                     <div class="row">
                         <div class="col-md-2">
                             <?php if (!empty($product['product_image'])) : ?>
-                                <img src="<?php echo base_url('assets/uploads/products/' . $product['product_image']); ?>" alt="<?php echo $product['product_name']; ?>" class="img-fluid">
+                                <img src="<?php echo base_url('uploads/products/' . $product['product_image']); ?>" alt="<?php echo $product['product_name']; ?>" class="img-fluid">
                             <?php else : ?>
                                 <img src="<?php echo base_url('assets/images/no-image.png'); ?>" alt="No Image" class="img-fluid">
                             <?php endif; ?>

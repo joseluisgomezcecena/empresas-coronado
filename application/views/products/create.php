@@ -1,3 +1,6 @@
+<script type="text/javascript">
+    console.log('View file loaded');
+</script>
 <div class="page-header">
     <h2 class="header-title">Nuevo Producto</h2>
     <div class="header-sub-title">
@@ -58,6 +61,9 @@
                         <?php echo form_error('product_name', '<div class="text-danger">', '</div>'); ?>
                     </div>
                     
+ 
+
+                    
                     <div class="form-group col-md-4">
                         <label for="purchase_price">Precio de Compra</label>
                         <div class="input-group">
@@ -106,6 +112,26 @@
                         <input type="file" class="form-control-file" id="product_image" name="product_image">
                         <small class="form-text text-muted">Formatos permitidos: jpg, jpeg, png, gif. Tamaño máximo: 2MB</small>
                     </div>
+
+                    <div class="form-group col-md-12">
+    <label for="years">Años Compatibles</label>
+    <div class="years-container">
+        <div class="year-row">
+            <div class="input-group">
+                <input type="number" class="form-control" name="years[]" placeholder="Año" min="1900" max="<?php echo date('Y') + 1; ?>">
+                <div class="input-group-append">
+                    <button class="btn btn-danger remove-year-btn" type="button">
+                        <i class="anticon anticon-close"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="button" class="btn btn-sm btn-secondary add-year-btn mt-2">
+        <i class="anticon anticon-plus"></i> Agregar otro año
+    </button>
+    <small class="form-text text-muted">Agregue los años para los que este producto es compatible.</small>
+</div>
                     
                     <div class="form-group col-md-12">
                         <button type="submit" class="btn btn-primary">Guardar Producto</button>
@@ -116,12 +142,61 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+// Wait for document to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Select2 if it exists
+    if ($.fn.select2) {
+        $('.select2').select2({
+            placeholder: "Seleccione las categorías"
+        });
+    }
+</script>
 
 <script>
-$(document).ready(function() {
-    // Initialize Select2
-    $('.select2').select2({
-        placeholder: "Seleccione las categorías"
+document.addEventListener('DOMContentLoaded', function() {
+    // Get the containers and buttons
+    const yearsContainer = document.querySelector('.years-container');
+    const addYearBtn = document.querySelector('.add-year-btn');
+
+    // Function to create a new year input row
+    function createYearRow() {
+        const yearRow = document.createElement('div');
+        yearRow.className = 'year-row';
+        yearRow.innerHTML = `
+            <div class="input-group mt-2">
+                <input type="number" class="form-control" name="years[]" placeholder="Año" 
+                       min="1900" max="${new Date().getFullYear() + 1}">
+                <div class="input-group-append">
+                    <button class="btn btn-danger remove-year-btn" type="button">
+                        <i class="anticon anticon-close"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+        return yearRow;
+    }
+
+    // Add new year field
+    addYearBtn.addEventListener('click', function() {
+        const newRow = createYearRow();
+        yearsContainer.appendChild(newRow);
+    });
+
+    // Remove year field using event delegation
+    yearsContainer.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-year-btn') || 
+            e.target.closest('.remove-year-btn')) {
+            const yearRow = e.target.closest('.year-row');
+            const totalYears = yearsContainer.querySelectorAll('.year-row').length;
+            
+            if (totalYears > 1) {
+                yearRow.remove();
+            } else {
+                // If it's the last field, just clear the value
+                yearRow.querySelector('input').value = '';
+            }
+        }
     });
 });
 </script>

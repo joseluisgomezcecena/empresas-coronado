@@ -59,7 +59,7 @@
                             <tr>
                                 <td>
                                     <?php if (!empty($product['product_image'])) : ?>
-                                        <img src="<?php echo base_url('assets/uploads/products/' . $product['product_image']); ?>" alt="<?php echo $product['product_name']; ?>" width="50">
+                                        <img src="<?php echo base_url('uploads/products/' . $product['product_image']); ?>" alt="<?php echo $product['product_name']; ?>" width="50">
                                     <?php else : ?>
                                         <img src="<?php echo base_url('assets/images/no-image.png'); ?>" alt="No Image" width="50">
                                     <?php endif; ?>

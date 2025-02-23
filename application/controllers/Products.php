@@ -15,6 +15,11 @@ class Products extends MY_Controller
         $data['title'] = 'Productos';
         $data['products'] = $this->Products_model->get_products();
         
+        // Get years for each product
+        foreach ($data['products'] as &$product) {
+            $product['years'] = $this->Products_model->get_product_years($product['id']);
+        }
+        
         $this->load->view('_templates/header', $data);
         $this->load->view('_templates/topnav');
         $this->load->view('_templates/sidebar');
@@ -36,6 +41,7 @@ class Products extends MY_Controller
         $this->form_validation->set_rules('sale_price', 'Precio de Venta', 'required|numeric');
         $this->form_validation->set_rules('suggested_price', 'Precio Sugerido', 'required|numeric');
         $this->form_validation->set_rules('category_id[]', 'Categorías', 'required');
+        // Years validation is not required, as a product might fit all years of a model
 
         if ($this->form_validation->run() === FALSE) {
             $this->load->view('_templates/header', $data);
@@ -47,7 +53,7 @@ class Products extends MY_Controller
             // Handle image upload
             $product_image = '';
             if (!empty($_FILES['product_image']['name'])) {
-                $config['upload_path'] = './assets/uploads/products/';
+                $config['upload_path'] = './uploads/products/';
                 $config['allowed_types'] = 'gif|jpg|jpeg|png';
                 $config['max_size'] = 2048;
                 $config['file_name'] = time() . '_' . $_FILES['product_image']['name'];
@@ -83,6 +89,12 @@ class Products extends MY_Controller
             $categories = $this->input->post('category_id');
             $this->Products_model->save_product_categories($product_id, $categories);
             
+            // Save product years
+            $years = $this->input->post('years');
+            if (!empty($years)) {
+                $this->Products_model->save_product_years($product_id, $years);
+            }
+            
             $this->session->set_flashdata('success', 'Producto creado exitosamente');
             redirect(base_url().'products');
         }
@@ -101,6 +113,7 @@ class Products extends MY_Controller
         $data['product'] = $this->Products_model->get_product($id);
         $data['categories'] = $this->Categories_model->get_categories();
         $data['product_categories'] = $this->Products_model->get_product_categories($id);
+        $data['product_years'] = $this->Products_model->get_product_years($id);
         
         $this->form_validation->set_rules('part_number', 'Número de Parte', 'required');
         $this->form_validation->set_rules('car_brand', 'Marca de Auto', 'required');
@@ -162,6 +175,10 @@ class Products extends MY_Controller
             $categories = $this->input->post('category_id');
             $this->Products_model->update_product_categories($id, $categories);
             
+            // Update product years
+            $years = $this->input->post('years');
+            $this->Products_model->update_product_years($id, $years);
+            
             $this->session->set_flashdata('success', 'Producto actualizado exitosamente');
             redirect(base_url().'products');
         }
@@ -191,6 +208,7 @@ class Products extends MY_Controller
             $data['active'] = 'products';
             $data['title'] = 'Eliminar Producto';
             $data['product'] = $this->Products_model->get_product($id);
+            $data['product_years'] = $this->Products_model->get_product_years($id);
             
             $this->load->view('_templates/header', $data);
             $this->load->view('_templates/topnav');
@@ -212,6 +230,7 @@ class Products extends MY_Controller
         $data['title'] = 'Detalles de Producto';
         $data['product'] = $this->Products_model->get_product($id);
         $data['product_categories'] = $this->Products_model->get_product_categories($id);
+        $data['product_years'] = $this->Products_model->get_product_years($id);
         
         $this->load->view('_templates/header', $data);
         $this->load->view('_templates/topnav');

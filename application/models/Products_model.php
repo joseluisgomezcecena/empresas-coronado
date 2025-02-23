@@ -79,12 +79,68 @@ class Products_model extends CI_Model {
         return $categories;
     }
 
+    // YEAR FUNCTIONS
+    public function save_product_years($product_id, $years)
+    {
+        if(empty($years)) {
+            return true;
+        }
+        
+        foreach ($years as $year) {
+            if(!empty($year)) {
+                $data = array(
+                    'product_id' => $product_id,
+                    'year' => $year
+                );
+                $this->db->insert('product_years', $data);
+            }
+        }
+        return true;
+    }
+
+    public function update_product_years($product_id, $years)
+    {
+        // Delete existing year relationships
+        $this->db->where('product_id', $product_id);
+        $this->db->delete('product_years');
+        
+        // Insert new year relationships
+        return $this->save_product_years($product_id, $years);
+    }
+
+    public function get_product_years($product_id)
+    {
+        $this->db->select('py.year');
+        $this->db->from('product_years py');
+        $this->db->where('py.product_id', $product_id);
+        $this->db->order_by('py.year', 'ASC');
+        $query = $this->db->get();
+        
+        $years = array();
+        foreach ($query->result_array() as $row) {
+            $years[] = $row['year'];
+        }
+        
+        return $years;
+    }
+
     public function get_products_by_category($category_id)
     {
         $this->db->select('p.*');
         $this->db->from('products p');
         $this->db->join('product_categories pc', 'p.id = pc.product_id');
         $this->db->where('pc.category_id', $category_id);
+        $this->db->order_by('p.product_name', 'ASC');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function get_products_by_year($year)
+    {
+        $this->db->select('p.*');
+        $this->db->from('products p');
+        $this->db->join('product_years py', 'p.id = py.product_id');
+        $this->db->where('py.year', $year);
         $this->db->order_by('p.product_name', 'ASC');
         $query = $this->db->get();
         return $query->result_array();

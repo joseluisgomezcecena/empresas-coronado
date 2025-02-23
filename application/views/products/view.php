@@ -49,7 +49,7 @@
         <div class="row">
             <div class="col-md-4 text-center mb-4">
                 <?php if (!empty($product['product_image'])) : ?>
-                    <img src="<?php echo base_url('assets/uploads/products/' . $product['product_image']); ?>" alt="<?php echo $product['product_name']; ?>" class="img-fluid" style="max-height: 250px;">
+                    <img src="<?php echo base_url('uploads/products/' . $product['product_image']); ?>" alt="<?php echo $product['product_name']; ?>" class="img-fluid" style="max-height: 250px;">
                 <?php else : ?>
                     <img src="<?php echo base_url('assets/images/no-image.png'); ?>" alt="No Image" class="img-fluid" style="max-height: 250px;">
                 <?php endif; ?>
@@ -110,6 +110,42 @@
                                         }
                                     }
                                     echo !empty($category_names) ? implode(', ', $category_names) : 'Sin categorías';
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Años Compatibles</th>
+                                <td>
+                                    <?php 
+                                    if (!empty($product_years)) {
+                                        // Sort years in ascending order
+                                        sort($product_years);
+                                        
+                                        // Group consecutive years
+                                        $ranges = [];
+                                        $start = $product_years[0];
+                                        $prev = $start;
+                                        
+                                        for ($i = 1; $i <= count($product_years); $i++) {
+                                            if ($i == count($product_years) || $product_years[$i] != $prev + 1) {
+                                                if ($start == $prev) {
+                                                    $ranges[] = $start;
+                                                } else {
+                                                    $ranges[] = $start . ' - ' . $prev;
+                                                }
+                                                if ($i < count($product_years)) {
+                                                    $start = $product_years[$i];
+                                                    $prev = $start;
+                                                }
+                                            } else {
+                                                $prev = $product_years[$i];
+                                            }
+                                        }
+                                        
+                                        echo implode(', ', $ranges);
+                                    } else {
+                                        echo 'Sin años especificados';
+                                    }
                                     ?>
                                 </td>
                             </tr>

@@ -12,7 +12,6 @@
     <div class="card-body">
         <h4>Información del Producto</h4>
         <div class="m-t-25">
-
             <!-- echo flash messages -->
             <?php if ($this->session->flashdata('success')) { ?>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -56,6 +55,43 @@
                         <label for="product_name">Nombre del Producto</label>
                         <input type="text" class="form-control" id="product_name" name="product_name" placeholder="Nombre del Producto" value="<?php echo set_value('product_name', $product['product_name']); ?>">
                         <?php echo form_error('product_name', '<div class="text-danger">', '</div>'); ?>
+                    </div>
+                    
+                    <div class="form-group col-md-12">
+                        <label for="years">Años Compatibles</label>
+                        <div class="years-container">
+                            <?php if (!empty($product_years)) : ?>
+                                <?php foreach ($product_years as $year) : ?>
+                                    <div class="year-row">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" name="years[]" placeholder="Año" 
+                                                   min="1900" max="<?php echo date('Y') + 1; ?>" value="<?php echo $year; ?>">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-danger remove-year-btn" type="button">
+                                                    <i class="anticon anticon-close"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <div class="year-row">
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="years[]" placeholder="Año" 
+                                               min="1900" max="<?php echo date('Y') + 1; ?>">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-danger remove-year-btn" type="button">
+                                                <i class="anticon anticon-close"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-secondary add-year-btn mt-2">
+                            <i class="anticon anticon-plus"></i> Agregar otro año
+                        </button>
+                        <small class="form-text text-muted">Agregue los años para los que este producto es compatible.</small>
                     </div>
                     
                     <div class="form-group col-md-4">
@@ -108,7 +144,7 @@
                         <label for="product_image">Imagen del Producto</label>
                         <?php if (!empty($product['product_image'])) : ?>
                             <div class="mb-2">
-                                <img src="<?php echo base_url('assets/uploads/products/' . $product['product_image']); ?>" alt="<?php echo $product['product_name']; ?>" width="100">
+                                <img src="<?php echo base_url('uploads/products/' . $product['product_image']); ?>" alt="<?php echo $product['product_name']; ?>" width="150">
                             </div>
                         <?php endif; ?>
                         <input type="file" class="form-control-file" id="product_image" name="product_image">
@@ -127,10 +163,56 @@
 </div>
 
 <script>
-$(document).ready(function() {
-    // Initialize Select2
-    $('.select2').select2({
-        placeholder: "Seleccione las categorías"
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Select2 (if you're still using it for categories)
+    if (typeof $('.select2').select2 === 'function') {
+        $('.select2').select2({
+            placeholder: "Seleccione las categorías"
+        });
+    }
+
+    // Get the containers and buttons
+    const yearsContainer = document.querySelector('.years-container');
+    const addYearBtn = document.querySelector('.add-year-btn');
+
+    // Function to create a new year input row
+    function createYearRow() {
+        const yearRow = document.createElement('div');
+        yearRow.className = 'year-row';
+        yearRow.innerHTML = `
+            <div class="input-group">
+                <input type="number" class="form-control" name="years[]" placeholder="Año" 
+                       min="1900" max="${new Date().getFullYear() + 1}">
+                <div class="input-group-append">
+                    <button class="btn btn-danger remove-year-btn" type="button">
+                        <i class="anticon anticon-close"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+        return yearRow;
+    }
+
+    // Add new year field
+    addYearBtn.addEventListener('click', function() {
+        const newRow = createYearRow();
+        yearsContainer.appendChild(newRow);
+    });
+
+    // Remove year field using event delegation
+    yearsContainer.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-year-btn') || 
+            e.target.closest('.remove-year-btn')) {
+            const yearRow = e.target.closest('.year-row');
+            const totalYears = yearsContainer.querySelectorAll('.year-row').length;
+            
+            if (totalYears > 1) {
+                yearRow.remove();
+            } else {
+                // If it's the last field, just clear the value
+                yearRow.querySelector('input').value = '';
+            }
+        }
     });
 });
 </script>
