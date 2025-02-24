@@ -27,6 +27,7 @@ $route['inventory'] = 'inventory/index';
 $route['inventory/movements/(:any)'] = 'inventory/movements/$1';
 $route['inventory/add/(:any)'] = 'inventory/add_movement/$1';
 
+$route['producto/(:num)'] = 'pages/product_detail/$1';
 
 
 //clients routes.

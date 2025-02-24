@@ -83,13 +83,25 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a href="<?php echo base_url('productos/detalle/' . $product['id']); ?>" 
-                               class="btn btn-dark btn-sm w-100">Ver Detalles</a>
+                        <a href="<?php echo base_url('producto/' . $product['id']); ?>" class="btn btn-dark btn-sm w-100">Ver Detalles</a>
+
                         </div>
                     </div>
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
+
+        <?php if(!empty($products)): ?>
+            <div class="col-12 mt-4">
+                <div class="pagination-container">
+                    <?php echo $pagination; ?>
+                </div>
+                <div class="text-center text-muted mt-2">
+                    Mostrando <?php echo count($products); ?> de <?php echo $total_results; ?> resultados
+                </div>
+            </div>
+        <?php endif; ?>
+
     </div>
 </div>
 

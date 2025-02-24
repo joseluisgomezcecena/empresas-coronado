@@ -228,7 +228,7 @@ class Products_model extends CI_Model {
         return $query->result_array();
     }
 
-
+    /*
     public function get_product_with_inventory($id)
     {
         $this->db->select('p.*, 
@@ -241,6 +241,41 @@ class Products_model extends CI_Model {
         $this->db->group_by('p.id');
         $query = $this->db->get();
         return $query->row_array();
+    }
+    */
+
+
+    public function get_product_with_inventory($id)
+    {
+        $this->db->select('p.*, b.name as brand_name, 
+            COALESCE(SUM(CASE WHEN im.movement_type = "entrada" THEN im.quantity 
+            ELSE -im.quantity END), 0) as current_stock');
+        $this->db->from('products p');
+        $this->db->join('brands b', 'p.car_brand = b.id', 'left');
+        $this->db->join('inventory_movements im', 'p.id = im.product_id', 'left');
+        $this->db->where('p.id', $id);
+        $this->db->group_by('p.id');
+        $query = $this->db->get();
+        return $query->row_array();
+    }
+
+    public function get_similar_products($brand_id, $model, $current_id, $limit = 4)
+    {
+        $this->db->select('p.*, b.name as brand_name, 
+            COALESCE(SUM(CASE WHEN im.movement_type = "entrada" THEN im.quantity 
+            ELSE -im.quantity END), 0) as current_stock');
+        $this->db->from('products p');
+        $this->db->join('brands b', 'p.car_brand = b.id', 'left');
+        $this->db->join('inventory_movements im', 'p.id = im.product_id', 'left');
+        $this->db->where('p.id !=', $current_id);
+        $this->db->where('p.car_brand', $brand_id);
+        $this->db->where('p.car_model', $model);
+        $this->db->group_by('p.id');
+        $this->db->having('current_stock >', 0);
+        $this->db->order_by('p.product_name', 'ASC');
+        $this->db->limit($limit);
+        $query = $this->db->get();
+        return $query->result_array();
     }
 
     /*
@@ -292,6 +327,7 @@ class Products_model extends CI_Model {
         return print_r($last_query);
     }
     */
+    /*
     public function search_catalog($brand_id = null, $model_id = null, $year = null, $term = null)
     {
         // First, if model_id is provided, get the model name
@@ -345,4 +381,120 @@ class Products_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    */
+
+    public function count_search_results($brand_id = null, $model_id = null, $year = null, $term = null)
+    {
+        // First, if model_id is provided, get the model name
+        $model_name = null;
+        if($model_id) {
+            $this->db->select('name');
+            $this->db->from('models');
+            $this->db->where('id', $model_id);
+            $model_query = $this->db->get();
+            if($model_query->num_rows() > 0) {
+                $model_name = $model_query->row()->name;
+            }
+        }
+
+        // Count query
+        $this->db->select('COUNT(DISTINCT p.id) as total');
+        $this->db->from('products p');
+        $this->db->join('brands b', 'p.car_brand = b.id', 'left');
+        $this->db->join('inventory_movements im', 'p.id = im.product_id', 'left');
+        
+        // Year filter
+        if($year) {
+            $this->db->join('product_years py', 'p.id = py.product_id');
+            $this->db->where('py.year', $year);
+        }
+        
+        // Brand filter
+        if($brand_id) {
+            $this->db->where('p.car_brand', $brand_id);
+        }
+        
+        // Model filter
+        if($model_name) {
+            $this->db->where('p.car_model', $model_name);
+        }
+        
+        // Search term
+        if($term) {
+            $this->db->group_start();
+            $this->db->like('p.product_name', $term);
+            $this->db->or_like('p.part_number', $term);
+            $this->db->group_end();
+        }
+        
+        // Only products with stock
+        $this->db->having('SUM(CASE WHEN im.movement_type = "entrada" THEN im.quantity ELSE -im.quantity END) > 0');
+        
+        $result = $this->db->get()->row();
+        return $result->total;
+    }
+
+
+    public function search_catalog($brand_id = null, $model_id = null, $year = null, $term = null, $limit = null, $offset = null)
+    {
+        // First, if model_id is provided, get the model name
+        $model_name = null;
+        if($model_id) {
+            $this->db->select('name');
+            $this->db->from('models');
+            $this->db->where('id', $model_id);
+            $model_query = $this->db->get();
+            if($model_query->num_rows() > 0) {
+                $model_name = $model_query->row()->name;
+            }
+        }
+
+        // Main query
+        $this->db->select('p.*, b.name as brand_name, 
+            COALESCE(SUM(CASE WHEN im.movement_type = "entrada" THEN im.quantity 
+            ELSE -im.quantity END), 0) as current_stock');
+        $this->db->from('products p');
+        $this->db->join('brands b', 'p.car_brand = b.id', 'left');
+        $this->db->join('inventory_movements im', 'p.id = im.product_id', 'left');
+        
+        // Year filter
+        if($year) {
+            $this->db->join('product_years py', 'p.id = py.product_id');
+            $this->db->where('py.year', $year);
+        }
+        
+        // Brand filter
+        if($brand_id) {
+            $this->db->where('p.car_brand', $brand_id);
+        }
+        
+        // Model filter
+        if($model_name) {
+            $this->db->where('p.car_model', $model_name);
+        }
+        
+        // Search term
+        if($term) {
+            $this->db->group_start();
+            $this->db->like('p.product_name', $term);
+            $this->db->or_like('p.part_number', $term);
+            $this->db->group_end();
+        }
+        
+        $this->db->group_by('p.id');
+        $this->db->having('current_stock >', 0);
+        $this->db->order_by('p.product_name', 'ASC');
+        
+        // Apply pagination limits if provided
+        if($limit !== null) {
+            $this->db->limit($limit, $offset);
+        }
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+
+    
+
 }
