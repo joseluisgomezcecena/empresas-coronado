@@ -2,149 +2,91 @@
 
 class Pages extends CI_Controller
 {
-    
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->model('Brand_model');
+        $this->load->model('Model_model');
+        $this->load->model('Products_model');
+    }
+
+
     public function view($page = 'home')
     {
         
-        $data['hubspot'] = "h";
+        $data['madeby'] = "joseluisgomezcecena.";
+        $data['title'] = ucfirst($page);
+        $data['brands'] = $this->Brand_model->get_all_brands();
+
+
+        $this->load->view('_frontend/header', $data);
+        $this->load->view('_frontend/navbar', $data);
         $this->load->view('pages/' . $page, $data);
-    }
-
-
-    public function property_details($slug) {
-        $data['controller'] = $this;
-        
-        //get property by slug
-        $data['property'] = $this->Property_model->get_property_by_slug($slug);
-        $data['images'] = $this->Property_model->get_images($data['property']['property_id']);
-
-        //get custom fields
-        $data['custom_fields'] = $this->Property_model->get_custom_fields_for_page($data['property']['property_id']);
-
-        $user_id = $data['property']['user_id'];
-        $data['user'] = $this->User_model->get_user($user_id);
-        
-
-        $data['title'] = 'Detalles | ' . $data['property']['title'];
-        $data['categories'] = $this->Categories_model->get_categories();
-        $data['cities'] = $this->Property_model->get_all_municipios();
-    
-        
-    
-        $this->load->view('_frontend/header', $data);
-        $this->load->view('_frontend/navbar', $data);
-        $this->load->view('pages/property_details', $data);
-        $this->load->view('_frontend/footer', $data);
-    }
-
-
-    public function property_list($category = null)
-    {
-       
-        $data['controller'] = $this;
-
-        if ($category == null) {
-            $title = 'Nuestras propiedades';
-        } else {
-            $title = 'Propiedades en ' . $category;
-        }
-        $data['title'] = $title;
-        
-        $data['categories'] = $this->Categories_model->get_categories();
-        $data['cities'] = $this->Property_model->get_all_municipios();
-        $data['properties'] = $this->Property_model->get_property_by_slug_category($category);
-
-        $data['main_image'] = array();
-        foreach ($data['properties'] as $key => $property) {
-            $data['main_image'][$key] = $this->Property_model->get_main_image($property['property_id']);
-        }
-
-
-        $this->load->view('_frontend/header', $data);
-        $this->load->view('_frontend/navbar', $data);
-        $this->load->view('pages/property_list', $data);
         $this->load->view('_frontend/footer', $data);
     }
 
 
     public function search()
     {
+        // Get search parameters
+        $brand_id = $this->input->get('brand');
+        $model_id = $this->input->get('model');
+        $year = $this->input->get('year');
+        $term = $this->input->get('search');
 
-        if(isset($_POST['search']))
-        {
-            $data['title'] = 'Resultados de la Busqueda.';
+        // Load required models
+        $this->load->model('Products_model');
+        $this->load->model('Brand_model');
+        $this->load->model('Model_model');
 
-                
-            $data = array(
-                'keyword' => $this->input->post('keyword'),
-                'category' => $this->input->post('category'),
-                'city' => $this->input->post('city'),
-                'max_price' => $this->input->post('max_price'),
-                'bedrooms' => $this->input->post('bedrooms'),
-                'bathrooms' => $this->input->post('bathrooms'),
-                'garage' => $this->input->post('garage'),
-                'surface' => $this->input->post('surface'),
-                'purpose' => $this->input->post('purpose'),
-                'status' => 1
-            );
-
-            $data['properties'] = $this->Property_model->search($data);
-            
-            
-
-            $data['controller'] = $this;
-            $data['categories'] = $this->Categories_model->get_categories();
-            $data['cities'] = $this->Property_model->get_all_municipios();
-            //$data['properties'] = $this->Property_model->get_property();
-
-            $data['main_image'] = array();
-            foreach ($data['properties'] as $key => $property) {
-                $data['main_image'][$key] = $this->Property_model->get_main_image($property['property_id']);
-            }
-
-            
-
-            $this->load->view('_frontend/header', $data);
-            $this->load->view('_frontend/navbar', $data);
-            $this->load->view('pages/property_list', $data);
-            $this->load->view('_frontend/footer', $data);
-
-            
-                   
-        }
-        else
-        {
-            redirect(base_url() . 'home');
-        }
-    }
-    
- 
-    public function main_image($property)
-    {
-        $data = $this->Property_model->get_main_image($property);
-        return $data['url'];
-    }
-
-
-    public function send() {
-        $this->load->model('Message_model');
-    
-        $name = $this->input->post('name');
-        $email = $this->input->post('email');
-        $message = $this->input->post('message');
-        $property_id = $this->input->post('property_id');
-
-        $data = array(
-            'name' => $name,
-            'email' => $email,
-            'message' => $message,
-            'property' => $property_id
-            
+        // Get search results
+        $data['products'] = $this->Products_model->search_catalog(
+            $brand_id, 
+            $model_id, 
+            $year, 
+            $term
         );
-    
-        $this->Message_model->save_message($data);
-    
-        echo json_encode(array('status' => 'success'));
+
+        // Load additional data for the view
+        $data['brands'] = $this->Brand_model->get_all_brands();
+        $data['search_term'] = $term;
+        $data['selected_brand'] = $brand_id;
+        $data['selected_model'] = $model_id;
+        $data['selected_year'] = $year;
+        
+        // Get models if brand is selected
+        if($brand_id) {
+            $data['models'] = $this->Model_model->get_models_by_brand($brand_id);
+        } else {
+            $data['models'] = array();
+        }
+
+        // Load views
+        $data['title'] = 'Resultados de búsqueda';
+        $data['madeby'] = "joseluisgomezcecena";
+        
+        $this->load->view('_frontend/header', $data);
+        $this->load->view('_frontend/navbar', $data);
+        $this->load->view('pages/search_results', $data);
+        $this->load->view('_frontend/footer', $data);
     }
+
+    //ajax search.
+    public function get_models()
+    {
+        $brand_id = $this->input->post('brand_id');
+        $models = $this->Model_model->get_models_by_brand($brand_id);
+        echo json_encode($models);
+    }
+
+    public function search_products()
+    {
+        $term = $this->input->post('term');
+        if(strlen($term) >= 3) {
+            $products = $this->Products_model->search_products($term);
+            echo json_encode($products);
+        }
+    }
+   
           
 }

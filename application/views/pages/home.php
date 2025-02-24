@@ -1,93 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Empresas Coronado</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .hero {
-            background: url('<?php echo base_url() ?>assets/images/car1.jpg') center/cover no-repeat;
-            height: 80vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
-            flex-direction: column;
-            position: relative;
-        }
 
-        .search-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            position: absolute;
-            width: 80%;
-            left: 50%;
-            transform: translateX(-50%);
-            top: 70vh;
-            z-index: 10;
-        }
-
-        .font-bolder {
-            font-weight: 700 !important;
-        }
-
-        .btn{
-            border-radius:.25rem!important;
-            font-weight: 700 !important;
-        }
-
-        /* on mobile */
-        @media (max-width: 768px) {
-            .hero {
-                height: 80vh;
-            }
-
-            .search-card {
-                top: 65vh;
-            }
-
-            .margin-mobile {
-                margin-top: 250px;
-            }
-        }
-
-        .navbar-toggler{
-            border: none;
-        }
-
-        a{
-            text-decoration: none !important;
-        }
-
-        .bg-black{
-            background-color: #000 !important;
-        }
-
-    </style>
-</head>
-<body>
-
-    <!-- Navigation -->
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Empresas Coronado</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="#nosotros">Nosotros</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#catalogo">Catálogo</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
     <header class="hero">
         <div class="container">
@@ -97,42 +8,43 @@
     </header>
 
     <div class="search-card mb-5">
-        <h2 class="font-bolder mb-2">Busqueda de piezas</h2>
-        <p class="lead">Busca piezas en nuestro amplio inventario.</p>
-        <form class="row g-3 mb-4">
-            <div class="col-md-2">
-                <select class="form-select" aria-label="Seleccionar Marca">
-                    <option selected>Marca</option>
-                    <option value="1">Toyota</option>
-                    <option value="2">Honda</option>
-                    <option value="3">Ford</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <select class="form-select" aria-label="Seleccionar Modelo">
-                    <option selected>Modelo</option>
-                    <option value="1">Corolla</option>
-                    <option value="2">Civic</option>
-                    <option value="3">Mustang</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <select class="form-select" aria-label="Seleccionar Año">
-                    <option selected>Año</option>
-                    <option value="1">2023</option>
-                    <option value="2">2022</option>
-                    <option value="3">2021</option>
-                </select>
-            </div>
-            <div class="col-md-4">
-                <input type="text" class="form-control" placeholder="Buscar Parte">
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-dark w-100">Buscar</button>
-            </div>
-            <a style="text-decoration:none;" href="<?php echo base_url("catalogo") ?>">Busqueda Avanzada ></a>
-        </form>
-    </div>
+    <h2 class="font-bolder mb-2">Busqueda de piezas</h2>
+    <p class="lead">Busca piezas en nuestro amplio inventario.</p>
+    <form class="row g-3 mb-4"  method="get" action="<?php echo base_url('pages/search'); ?>">
+        <div class="col-md-2">
+            <select class="form-select" id="brand-select" name="brand" aria-label="Seleccionar Marca">
+                <option value="">Marca</option>
+                <?php foreach($brands as $brand): ?>
+                    <option value="<?php echo $brand['id']; ?>"><?php echo $brand['name']; ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select class="form-select" id="model-select" name="model" aria-label="Seleccionar Modelo" disabled>
+                <option value="">Modelo</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select class="form-select" name="year" aria-label="Seleccionar Año">
+                <option value="">Año</option>
+                <?php 
+                $current_year = date('Y');
+                for($i = $current_year; $i >= 1950; $i--): 
+                ?>
+                    <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                <?php endfor; ?>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control" id="search-input" name="search" placeholder="Buscar Parte">
+            <div id="search-results" class="position-absolute w-100 bg-white shadow-sm" style="display:none; z-index: 1000;"></div>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-dark w-100">Buscar</button>
+        </div>
+        <a style="text-decoration:none;" href="<?php echo base_url("catalogo") ?>">Busqueda Avanzada ></a>
+    </form>
+</div>
     
     <section id="about" class="py-5 text-center mt-5">
         <div class="container margin-mobile">
@@ -161,48 +73,115 @@
             </div>
         </div>
     </section>
-    
-    <footer class="bg-dark text-white py-4 mt-5">
-        <div class="container mt-5">
-            <div class="row">
-                <div class="col-md-3">
-                    <h5>Empresas Coronado S.A. de C.V.</h5>
-                    <ul class="list-unstyled">
-                        <li><p href="#" class="text-white">
-                            Blvd. Lázaro Cárdenas Km 2.5, La Bodega, 21298 Mexicali, B.C.
-                        </p></li>
-                        <li>
-                            <p href="#" class="text-white">Tel. (686) 216 7037</p>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h5>Navegación</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Sobre la empresa</a></li>
-                        <li><a href="#" class="text-white">Catalogo</a></li>
-                        <li><a href="#" class="text-white">Contacto</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h5>Politicas</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Politica de privacidad</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h5>Redes Sociales</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Facebook</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <div class="bg-black text-white text-center py-2">
-        <p class="mt-2">© <?php echo date("Y") ?> Empresas Coronado S.A. de C.V. Todos los derechos reservados.</p>
-    </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const brandSelect = document.getElementById('brand-select');
+    const modelSelect = document.getElementById('model-select');
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+    let searchTimeout;
+
+    // Handle brand selection
+    brandSelect.addEventListener('change', async function() {
+        const brandId = this.value;
+        modelSelect.disabled = true;
+        modelSelect.innerHTML = '<option value="">Modelo</option>';
+
+        if(brandId) {
+            try {
+                const response = await fetch('<?php echo base_url("pages/get_models"); ?>', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `brand_id=${brandId}`
+                });
+                
+                if (!response.ok) throw new Error('Network response was not ok');
+                
+                const models = await response.json();
+                
+                models.forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model.id;
+                    option.textContent = model.name;
+                    modelSelect.appendChild(option);
+                });
+                
+                modelSelect.disabled = false;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    });
+
+    // Predictive search
+    searchInput.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        const term = this.value;
+        
+        if(term.length >= 3) {
+            searchTimeout = setTimeout(async function() {
+                try {
+                    const response = await fetch('<?php echo base_url("pages/search_products"); ?>', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `term=${encodeURIComponent(term)}`
+                    });
+                    
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    
+                    const products = await response.json();
+                    
+                    if(products.length > 0) {
+                        searchResults.innerHTML = products.map(product => `
+                            <div class="p-2 search-item border-bottom" role="button" 
+                                 onclick="selectProduct('${product.product_name}')">
+                                ${product.product_name} - ${product.part_number}
+                            </div>
+                        `).join('');
+                        searchResults.style.display = 'block';
+                    } else {
+                        searchResults.innerHTML = '<div class="p-2">No se encontraron resultados</div>';
+                        searchResults.style.display = 'block';
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }, 300);
+        } else {
+            searchResults.style.display = 'none';
+        }
+    });
+
+    // Hide search results when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+            searchResults.style.display = 'none';
+        }
+    });
+
+    // Function to select a product from search results
+    window.selectProduct = function(productName) {
+        searchInput.value = productName;
+        searchResults.style.display = 'none';
+    };
+});
+</script>
+
+<style>
+.search-item:hover {
+    background-color: #f8f9fa;
+    cursor: pointer;
+}
+
+#search-results {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+}
+</style>

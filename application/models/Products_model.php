@@ -242,4 +242,107 @@ class Products_model extends CI_Model {
         $query = $this->db->get();
         return $query->row_array();
     }
+
+    /*
+    public function search_catalog($brand_id = null, $model_id = null, $year = null, $term = null)
+    {
+        $this->db->select('p.*, b.name as brand_name, 
+            COALESCE(SUM(CASE WHEN im.movement_type = "entrada" THEN im.quantity 
+            ELSE -im.quantity END), 0) as current_stock');
+        $this->db->from('products p');
+        $this->db->join('brands b', 'p.car_brand = b.id', 'left');
+        $this->db->join('inventory_movements im', 'p.id = im.product_id', 'left');
+        
+        // Apply filters if provided
+        
+        if($brand_id) {
+            $this->db->where('p.car_brand', $brand_id);
+        }
+       
+        
+        if($model_id) {
+            $this->db->where('p.car_model', $model_id);
+        }
+        
+        if($year) {
+            $this->db->join('product_years py', 'p.id = py.product_id');
+            $this->db->where('py.year', $year);
+        }
+        
+        if($term) {
+            $this->db->group_start();
+            $this->db->like('p.product_name', $term);
+            $this->db->or_like('p.part_number', $term);
+            $this->db->or_like('p.car_brand', $term);
+            $this->db->or_like('p.car_model', $term);
+            $this->db->group_end();
+        }
+        
+        $this->db->group_by('p.id');
+        $this->db->having('current_stock >', 0); // Only show products with stock
+        $this->db->order_by('p.product_name', 'ASC');
+        
+        $query = $this->db->get();
+        //return $query->result_array();
+        $last_query = $this->db->last_query();
+        array(
+            'products' => $query->result_array(),
+            'query' => $last_query
+        );
+        return print_r($last_query);
+    }
+    */
+    public function search_catalog($brand_id = null, $model_id = null, $year = null, $term = null)
+    {
+        // First, if model_id is provided, get the model name
+        $model_name = null;
+        if($model_id) {
+            $this->db->select('name');
+            $this->db->from('models');
+            $this->db->where('id', $model_id);
+            $model_query = $this->db->get();
+            if($model_query->num_rows() > 0) {
+                $model_name = $model_query->row()->name;
+            }
+        }
+
+        // Main query
+        $this->db->select('p.*, b.name as brand_name, 
+            COALESCE(SUM(CASE WHEN im.movement_type = "entrada" THEN im.quantity 
+            ELSE -im.quantity END), 0) as current_stock');
+        $this->db->from('products p');
+        $this->db->join('brands b', 'p.car_brand = b.id', 'left');
+        $this->db->join('inventory_movements im', 'p.id = im.product_id', 'left');
+        
+        // Year filter (use LEFT JOIN)
+        if($year) {
+            $this->db->join('product_years py', 'p.id = py.product_id');
+            $this->db->where('py.year', $year);
+        }
+        
+        // Brand filter
+        if($brand_id) {
+            $this->db->where('p.car_brand', $brand_id);
+        }
+        
+        // Model filter - now using the model name instead of ID
+        if($model_name) {
+            $this->db->where('p.car_model', $model_name);
+        }
+        
+        // Search term
+        if($term) {
+            $this->db->group_start();
+            $this->db->like('p.product_name', $term);
+            $this->db->or_like('p.part_number', $term);
+            $this->db->group_end();
+        }
+        
+        $this->db->group_by('p.id');
+        $this->db->having('current_stock >', 0);
+        $this->db->order_by('p.product_name', 'ASC');
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
