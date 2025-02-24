@@ -1,5 +1,7 @@
 <div class="container mt-4">
-       <!-- Search Form -->
+    <h1 class="mb-4">Catálogo de Productos</h1>
+    
+    <!-- Search Form -->
 <div class="card mb-4">
     <div class="card-body">
         <form class="row g-3" method="get" action="<?php echo base_url('pages/search'); ?>">
@@ -56,8 +58,8 @@
     <div class="row">
         <?php if(empty($products)): ?>
             <div class="col-12 text-center py-5">
-                <h3>No se encontraron resultados</h3>
-                <p>Intenta con otros términos de búsqueda</p>
+                <h3>No se encontraron productos</h3>
+                <p>No hay productos disponibles en este momento</p>
             </div>
         <?php else: ?>
             <?php foreach($products as $product): ?>
@@ -85,25 +87,23 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                        <a href="<?php echo base_url('producto/' . $product['id']); ?>" class="btn btn-dark btn-sm w-100">Ver Detalles</a>
-
+                            <a href="<?php echo base_url('producto/' . $product['id']); ?>" 
+                               class="btn btn-dark btn-sm w-100">Ver Detalles</a>
                         </div>
                     </div>
                 </div>
             <?php endforeach; ?>
-        <?php endif; ?>
-
-        <?php if(!empty($products)): ?>
+            
+            <!-- Pagination -->
             <div class="col-12 mt-4">
                 <div class="pagination-container">
                     <?php echo $pagination; ?>
                 </div>
                 <div class="text-center text-muted mt-2">
-                    Mostrando <?php echo count($products); ?> de <?php echo $total_results; ?> resultados
+                    Mostrando <?php echo count($products); ?> de <?php echo $total_results; ?> productos
                 </div>
             </div>
         <?php endif; ?>
-
     </div>
 </div>
 
@@ -146,6 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
 
 <script>
 // Predictive search functionality

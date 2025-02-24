@@ -495,6 +495,43 @@ class Products_model extends CI_Model {
     }
 
 
+
+
+    public function count_products_with_stock()
+    {
+        $this->db->select('COUNT(DISTINCT p.id) as total');
+        $this->db->from('products p');
+        $this->db->join('inventory_movements im', 'p.id = im.product_id', 'left');
+        
+        // Only products with stock
+        $this->db->having('SUM(CASE WHEN im.movement_type = "entrada" THEN im.quantity ELSE -im.quantity END) > 0');
+        
+        $result = $this->db->get()->row();
+        return $result->total;
+    }
+
+    public function get_all_products_with_stock($limit = null, $offset = null)
+    {
+        $this->db->select('p.*, b.name as brand_name, 
+            COALESCE(SUM(CASE WHEN im.movement_type = "entrada" THEN im.quantity 
+            ELSE -im.quantity END), 0) as current_stock');
+        $this->db->from('products p');
+        $this->db->join('brands b', 'p.car_brand = b.id', 'left');
+        $this->db->join('inventory_movements im', 'p.id = im.product_id', 'left');
+        
+        $this->db->group_by('p.id');
+        $this->db->having('current_stock >', 0);
+        $this->db->order_by('p.product_name', 'ASC');
+        
+        // Apply pagination limits if provided
+        if($limit !== null) {
+            $this->db->limit($limit, $offset);
+        }
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
     
 
 }

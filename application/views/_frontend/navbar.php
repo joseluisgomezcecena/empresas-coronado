@@ -8,9 +8,11 @@
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="#nosotros">Nosotros</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#catalogo">Catálogo</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+                  <!--
+                    <li class="nav-item"><a class="nav-link" href="nosotros">Nosotros</a></li>
+-->
+                    <li class="nav-item"><a class="nav-link" href="catalogo">Catálogo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contacto">Contacto</a></li>
                 </ul>
             </div>
         </div>
