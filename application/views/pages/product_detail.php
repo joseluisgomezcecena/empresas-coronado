@@ -107,7 +107,7 @@
                     <div class="d-grid gap-2">
                         <a href="https://wa.me/+52123456789?text=Hola, estoy interesado en el producto: <?php echo urlencode($product['product_name'] . ' (' . $product['part_number'] . ')'); ?>" 
                            class="btn btn-success btn-lg" target="_blank">
-                            <i class="fa fa-whatsapp me-2"></i> Contactar por WhatsApp
+                            <i class="fab fa-whatsapp me-2"></i> Contactar por WhatsApp
                         </a>
                         <a href="tel:+52123456789" class="btn btn-outline-dark btn-lg">
                             <i class="fa fa-phone me-2"></i> Llamar
