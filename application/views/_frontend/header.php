@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Empresas Coronado</title>
+    <?php if(isset($product)): ?>
+    <!-- Open Graph Tags for Social Sharing -->
+    <meta property="og:title" content="<?php echo $product['product_name']; ?>" />
+    <meta property="og:description" content="<?php echo $product['part_number']; ?> para <?php echo $product['car_brand']; ?> <?php echo $product['car_model']; ?>" />
+    <meta property="og:type" content="product" />
+    <meta property="og:url" content="<?php echo current_url(); ?>" />
+    <?php if(!empty($product['product_image'])): ?>
+    <meta property="og:image" content="<?php echo base_url('uploads/products/' . $product['product_image']); ?>" />
+    <?php else: ?>
+    <meta property="og:image" content="<?php echo base_url('assets/images/no-image.png'); ?>" />
+    <?php endif; ?>
+    <meta property="og:site_name" content="Empresas Coronado" />
+    <?php endif; ?>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .hero {

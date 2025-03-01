@@ -28,7 +28,27 @@
         <div class="col-md-7">
             <div class="card">
                 <div class="card-body">
-                    <h2 class="mb-3"><?php echo $product['product_name']; ?></h2>
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h2 class="mb-0"><?php echo $product['product_name']; ?></h2>
+                        
+                        <!-- Social Share Buttons -->
+                        <div class="share-buttons">
+                            <div class="btn-group" role="group">
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode(current_url()); ?>" 
+                                   class="btn btn-outline-primary" target="_blank" rel="noopener">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="https://twitter.com/intent/tweet?url=<?php echo urlencode(current_url()); ?>&text=<?php echo urlencode('Mira este producto: ' . $product['product_name']); ?>" 
+                                   class="btn btn-outline-info" target="_blank" rel="noopener">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="https://api.whatsapp.com/send?text=<?php echo urlencode('Mira este producto: ' . $product['product_name'] . ' ' . current_url()); ?>" 
+                                   class="btn btn-outline-success" target="_blank" rel="noopener">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                     
                     <div class="mb-3">
                         <p class="mb-1"><strong>Número de Parte:</strong> <?php echo $product['part_number']; ?></p>
@@ -125,7 +145,7 @@
                     <p class="h5 text-primary mb-2">$<?php echo number_format($similar['sale_price'], 2); ?></p>
                 </div>
                 <div class="card-footer">
-                    <a href="<?php echo base_url('pages/product_detail/' . $similar['id']); ?>" 
+                    <a href="<?php echo base_url('producto/' . $similar['id']); ?>" 
                        class="btn btn-dark btn-sm w-100">Ver Detalles</a>
                 </div>
             </div>
