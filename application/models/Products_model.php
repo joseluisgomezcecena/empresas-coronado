@@ -383,7 +383,7 @@ class Products_model extends CI_Model {
     }
     */
 
-    public function count_search_results($brand_id = null, $model_id = null, $year = null, $term = null)
+    public function count_search_results($brand_id = null, $model_id = null, $year = null, $term = null, $category_id=null)
     {
         // First, if model_id is provided, get the model name
         $model_name = null;
@@ -408,6 +408,13 @@ class Products_model extends CI_Model {
             $this->db->join('product_years py', 'p.id = py.product_id');
             $this->db->where('py.year', $year);
         }
+
+        // If category filter is applied
+        if($category_id) {
+            $this->db->join('product_categories pc', 'p.id = pc.product_id');
+            $this->db->where('pc.category_id', $category_id);
+        }
+        
         
         // Brand filter
         if($brand_id) {
@@ -435,7 +442,7 @@ class Products_model extends CI_Model {
     }
 
 
-    public function search_catalog($brand_id = null, $model_id = null, $year = null, $term = null, $limit = null, $offset = null)
+    public function search_catalog($brand_id = null, $model_id = null, $year = null, $term = null, $category_id=null, $limit = null, $offset = null)
     {
         // First, if model_id is provided, get the model name
         $model_name = null;
@@ -461,6 +468,12 @@ class Products_model extends CI_Model {
         if($year) {
             $this->db->join('product_years py', 'p.id = py.product_id');
             $this->db->where('py.year', $year);
+        }
+
+        // If category filter is applied
+        if($category_id) {
+            $this->db->join('product_categories pc', 'p.id = pc.product_id');
+            $this->db->where('pc.category_id', $category_id);
         }
         
         // Brand filter
@@ -497,11 +510,16 @@ class Products_model extends CI_Model {
 
 
 
-    public function count_products_with_stock()
+    public function count_products_with_stock($category_id = null)
     {
         $this->db->select('COUNT(DISTINCT p.id) as total');
         $this->db->from('products p');
         $this->db->join('inventory_movements im', 'p.id = im.product_id', 'left');
+
+        if($category_id) {
+            $this->db->join('product_categories pc', 'p.id = pc.product_id');
+            $this->db->where('pc.category_id', $category_id);
+        }
         
         // Only products with stock
         $this->db->having('SUM(CASE WHEN im.movement_type = "entrada" THEN im.quantity ELSE -im.quantity END) > 0');
@@ -510,7 +528,7 @@ class Products_model extends CI_Model {
         return $result->total;
     }
 
-    public function get_all_products_with_stock($limit = null, $offset = null)
+    public function get_all_products_with_stock($limit = null, $offset = null, $category_id=null)
     {
         $this->db->select('p.*, b.name as brand_name, 
             COALESCE(SUM(CASE WHEN im.movement_type = "entrada" THEN im.quantity 
@@ -522,6 +540,11 @@ class Products_model extends CI_Model {
         $this->db->group_by('p.id');
         $this->db->having('current_stock >', 0);
         $this->db->order_by('p.product_name', 'ASC');
+
+        if($category_id) {
+            $this->db->join('product_categories pc', 'p.id = pc.product_id');
+            $this->db->where('pc.category_id', $category_id);
+        }
         
         // Apply pagination limits if provided
         if($limit !== null) {

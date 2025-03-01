@@ -5,9 +5,14 @@ class Pages extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        $this->load->helper('my_url'); // Our custom helper - rename the file to my_url_helper.php
+
+        //$this->load->helper('url');
+
         $this->load->model('Brand_model');
         $this->load->model('Model_model');
         $this->load->model('Products_model');
+
     }
 
 
@@ -34,6 +39,8 @@ class Pages extends CI_Controller
         $year = $this->input->get('year');
         $term = $this->input->get('search');
 
+        $category_id = $this->input->get('category');
+
         // Load required models
         $this->load->model('Products_model');
         $this->load->model('Brand_model');
@@ -44,7 +51,7 @@ class Pages extends CI_Controller
     $this->load->library('pagination');
     
     // Count total results for pagination
-    $total_rows = $this->Products_model->count_search_results($brand_id, $model_id, $year, $term);
+    $total_rows = $this->Products_model->count_search_results($brand_id, $model_id, $year, $term, $category_id);
     
     // Pagination settings
     $config['base_url'] = site_url('pages/search');
@@ -89,6 +96,7 @@ class Pages extends CI_Controller
             $model_id, 
             $year, 
             $term,
+            $category_id,
             $config['per_page'], //pag.
             $page //pag.
         );
@@ -103,6 +111,11 @@ class Pages extends CI_Controller
         $data['selected_brand'] = $brand_id;
         $data['selected_model'] = $model_id;
         $data['selected_year'] = $year;
+
+        // Get all categories with product counts
+        $data['categories'] = $this->Categories_model->get_categories_with_count();
+        $data['selected_category'] = $category_id; // Store selected category
+
         
         // Get models if brand is selected
         if($brand_id) {
@@ -188,9 +201,10 @@ class Pages extends CI_Controller
 
         // Pagination config
         $this->load->library('pagination');
-        
+        $category_id = $this->input->get('category');
+
         // Count total products with stock
-        $total_rows = $this->Products_model->count_products_with_stock();
+        $total_rows = $this->Products_model->count_products_with_stock($category_id);
         
         // Pagination settings
         $config['base_url'] = site_url('catalogo');
@@ -226,13 +240,17 @@ class Pages extends CI_Controller
         $page = ($this->input->get('page')) ? $this->input->get('page') : 0;
         
         // Get paginated products
-        $data['products'] = $this->Products_model->get_all_products_with_stock($config['per_page'], $page);
+        $data['products'] = $this->Products_model->get_all_products_with_stock($config['per_page'], $page, $category_id);
 
         // Load additional data for the view
         $data['pagination'] = $this->pagination->create_links();
         $data['total_results'] = $total_rows;
         $data['brands'] = $this->Brand_model->get_all_brands();
-        
+
+         // Get all categories with product counts
+        $data['categories'] = $this->Categories_model->get_categories_with_count();
+        $data['selected_category'] = $category_id; // Store selected category
+            
         // For search form
         $data['search_term'] = '';
         $data['selected_brand'] = '';
