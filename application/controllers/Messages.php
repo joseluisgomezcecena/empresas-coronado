@@ -1,13 +1,15 @@
 <?php 
 
-class Messages extends CI_Controller
+class Messages extends MY_Controller
 {
     public function __construct()
     {
         parent::__construct();
         $this->load->model('Message_model');
+        $this->output->set_content_type('application/json');
     }
 
+    
     public function index(){
         $data['active'] = 'messages';
         $data['title'] = 'Mensajes';
@@ -19,7 +21,6 @@ class Messages extends CI_Controller
         $this->load->view('messages/index', $data);
         $this->load->view('_templates/footer');
     }
-
 
     public function view($id)
     {
@@ -33,23 +34,7 @@ class Messages extends CI_Controller
         $this->load->view('messages/view', $data);
         $this->load->view('_templates/footer');
     }
+        
 
-    public function create()
-    {
-        $this->load->helper('form');
-        $this->load->library('form_validation');
-
-        $data['title'] = 'Create a new message';
-
-        $this->form_validation->set_rules('name', 'Name', 'required');
-        $this->form_validation->set_rules('email', 'Email', 'required');
-        $this->form_validation->set_rules('message', 'Message', 'required');
-
-        if ($this->form_validation->run() === FALSE) {
-            $this->load->view('messages/create', $data);
-        } else {
-            $this->Message_model->set_message();
-            $this->load->view('messages/success');
-        }
-    }
+        
 }

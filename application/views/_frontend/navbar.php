@@ -11,8 +11,8 @@
                   <!--
                     <li class="nav-item"><a class="nav-link" href="nosotros">Nosotros</a></li>
 -->
-                    <li class="nav-item"><a class="nav-link" href="catalogo">Catálogo</a></li>
-                    <li class="nav-item"><a class="nav-link" href="contacto">Contacto</a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?php echo base_url(); ?>catalogo">Catálogo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?php echo base_url(); ?>contacto">Contacto</a></li>
                 </ul>
             </div>
         </div>

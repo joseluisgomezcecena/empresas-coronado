@@ -24,10 +24,22 @@ class Pages extends CI_Controller
         $data['brands'] = $this->Brand_model->get_all_brands();
 
 
-        $this->load->view('_frontend/header', $data);
-        $this->load->view('_frontend/navbar', $data);
-        $this->load->view('pages/' . $page, $data);
-        $this->load->view('_frontend/footer', $data);
+        if($page=="julian-moreno" || $page=="gustavo-coronado")
+        {
+            $this->load->view('_frontend/header', $data);
+            
+            $this->load->view('pages/'.$page, $data);
+            
+        }
+        else
+        {
+            $this->load->view('_frontend/header', $data);
+            $this->load->view('_frontend/navbar', $data);
+            $this->load->view('pages/' . $page, $data);
+            $this->load->view('_frontend/footer', $data);
+        }
+
+        
     }
 
 

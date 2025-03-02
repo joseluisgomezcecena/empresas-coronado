@@ -10,14 +10,13 @@ class Message_model extends CI_Model
 
 
     public function save_message($data) {
-        $this->db->insert('messages', $data);
+        return $this->db->insert('messages', $data);
     }
 
     public function index()
     {
         $this->db->select('*');
         $this->db->from('messages');
-        $this->db->join('property', 'property.property_id = messages.property');
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -27,7 +26,6 @@ class Message_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('messages');
-        $this->db->join('property', 'property.property_id = messages.property');
         $this->db->where('message_id', $id);
         $query = $this->db->get();
         return $query->row_array();
