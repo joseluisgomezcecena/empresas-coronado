@@ -438,7 +438,14 @@ class Products_model extends CI_Model {
         $this->db->having('SUM(CASE WHEN im.movement_type = "entrada" THEN im.quantity ELSE -im.quantity END) > 0');
         
         $result = $this->db->get()->row();
-        return $result->total;
+        
+        //return $result->total;
+        if ($result) {
+            return $result->total;
+        } else {
+            return 0; // Return 0 instead of null when no results
+        }
+
     }
 
 

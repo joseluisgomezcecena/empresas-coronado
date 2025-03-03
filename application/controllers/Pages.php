@@ -64,6 +64,12 @@ class Pages extends CI_Controller
     
     // Count total results for pagination
     $total_rows = $this->Products_model->count_search_results($brand_id, $model_id, $year, $term, $category_id);
+
+    //if total rows is equal to 0.
+    if ($total_rows == NULL) {
+        $total_rows = 0;
+    }
+
     
     // Pagination settings
     $config['base_url'] = site_url('pages/search');
